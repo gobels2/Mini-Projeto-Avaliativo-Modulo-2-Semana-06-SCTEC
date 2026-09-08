@@ -87,3 +87,51 @@ def remover_duplicatas(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     antes = len(df)
     resultado = df.drop_duplicates().reset_index(drop=True)
     return resultado, antes - len(resultado)
+
+
+UF_PARA_REGIAO: dict[str, str] = {
+    "AC": "NORTE", "AP": "NORTE", "AM": "NORTE", "PA": "NORTE",
+    "RO": "NORTE", "RR": "NORTE", "TO": "NORTE",
+    "AL": "NORDESTE", "BA": "NORDESTE", "CE": "NORDESTE", "MA": "NORDESTE",
+    "PB": "NORDESTE", "PE": "NORDESTE", "PI": "NORDESTE", "RN": "NORDESTE",
+    "SE": "NORDESTE",
+    "DF": "CENTRO-OESTE", "GO": "CENTRO-OESTE", "MT": "CENTRO-OESTE",
+    "MS": "CENTRO-OESTE",
+    "ES": "SUDESTE", "MG": "SUDESTE", "RJ": "SUDESTE", "SP": "SUDESTE",
+    "PR": "SUL", "RS": "SUL", "SC": "SUL",
+}
+
+
+def derivar_tipo_produto(df: pd.DataFrame) -> pd.DataFrame:
+    """Separa medicamentos de dispositivos pelo registro na Anvisa.
+
+    Metade da base tem `anvisa` e `generico` nulos. Não é falha de
+    preenchimento: dispositivo médico não tem registro de medicamento. Em vez
+    de imputar um valor, a ausência vira informação.
+    """
+    resultado = df.copy()
+    resultado["tipo_produto"] = resultado["anvisa"].notna().map(
+        {True: "MEDICAMENTO", False: "DISPOSITIVO/OUTRO"}
+    )
+    return resultado
+
+
+def derivar_principio_ativo(df: pd.DataFrame) -> pd.DataFrame:
+    """Extrai o nome do produto do início da descrição do CATMAT.
+
+    A descrição segue o padrão "NOME, ATRIBUTO:VALOR, ATRIBUTO:VALOR". O
+    primeiro token dá 2.198 nomes distintos contra 12.994 códigos CATMAT, o
+    que é a diferença entre um ranking legível e um ilegível.
+    """
+    resultado = df.copy()
+    resultado["principio_ativo"] = (
+        resultado["descricao_catmat"].str.split(",").str[0].str.strip()
+    )
+    return resultado
+
+
+def derivar_regiao(df: pd.DataFrame) -> pd.DataFrame:
+    """Mapeia a UF para a região geográfica."""
+    resultado = df.copy()
+    resultado["regiao"] = resultado["uf"].map(UF_PARA_REGIAO).fillna(NAO_INFORMADO)
+    return resultado

@@ -5,6 +5,9 @@ from src.tratamento import (
     converter_datas,
     converter_numericos,
     corrigir_esfera,
+    derivar_principio_ativo,
+    derivar_regiao,
+    derivar_tipo_produto,
     normalizar_descricao,
     normalizar_espacos,
     remover_duplicatas,
@@ -94,3 +97,48 @@ def test_funcoes_nao_alteram_o_dataframe_original():
     corrigir_esfera(df)
 
     assert df.loc[0, "esfera"] == "0"
+
+
+def test_derivar_tipo_produto_usa_a_presenca_do_registro_anvisa():
+    """anvisa nulo não é erro: indica item que não é medicamento."""
+    df = pd.DataFrame({"anvisa": ["1031100350033", None]})
+
+    resultado = derivar_tipo_produto(df)
+
+    assert list(resultado["tipo_produto"]) == [
+        "MEDICAMENTO",
+        "DISPOSITIVO/OUTRO",
+    ]
+
+
+def test_derivar_principio_ativo_pega_o_token_antes_da_primeira_virgula():
+    df = pd.DataFrame(
+        {
+            "descricao_catmat": [
+                "GLICONATO DE CÁLCIO, DOSAGEM:10%, APRESENTAÇÃO:SOLUÇÃO",
+                "PIPETA SEM VIRGULA",
+            ]
+        }
+    )
+
+    resultado = derivar_principio_ativo(df)
+
+    assert list(resultado["principio_ativo"]) == [
+        "GLICONATO DE CÁLCIO",
+        "PIPETA SEM VIRGULA",
+    ]
+
+
+def test_derivar_regiao_mapeia_as_cinco_regioes_e_o_desconhecido():
+    df = pd.DataFrame({"uf": ["PA", "CE", "GO", "SP", "RS", "ZZ"]})
+
+    resultado = derivar_regiao(df)
+
+    assert list(resultado["regiao"]) == [
+        "NORTE",
+        "NORDESTE",
+        "CENTRO-OESTE",
+        "SUDESTE",
+        "SUL",
+        "NÃO INFORMADO",
+    ]
