@@ -16,6 +16,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.io_bps import ANOS, ler_todos
+from src.tratamento import aplicar_tratamentos
 
 RAIZ = Path(__file__).resolve().parent.parent
 DIR_RAW = RAIZ / "data" / "raw"
@@ -90,14 +91,26 @@ def main() -> None:
     n_lidas = sum(len(df) for df in frames.values())
 
     df = concatenar(frames)
-    for coluna in ("qtd_itens_comprados", "preco_unitario", "preco_total"):
-        df[coluna] = pd.to_numeric(df[coluna], errors="coerce")
+    df, duplicatas = aplicar_tratamentos(df)
 
-    validar(df, n_lidas=n_lidas, n_duplicatas=0)
+    validar(df, n_lidas=n_lidas, n_duplicatas=duplicatas)
     caminho_csv, caminho_zip = gravar(df, DIR_SAIDA, NOME_BASE)
 
-    print(f"Linhas lidas:      {n_lidas:,}")
-    print(f"Linhas gravadas:   {len(df):,}")
+    atipicos = int(df["flag_preco_atipico"].sum())
+    valor_total = df["preco_total"].sum()
+    valor_atipicos = df.loc[df["flag_preco_atipico"], "preco_total"].sum()
+
+    print(f"Linhas lidas:        {n_lidas:,}")
+    print(f"Duplicatas removidas:{duplicatas:>8,}")
+    print(f"Linhas gravadas:     {len(df):,}")
+    print(f"Colunas:             {len(df.columns)}")
+    print(f"Valor total:         R$ {valor_total:,.2f}")
+    print(
+        f"Registros atipicos:  {atipicos:,} "
+        f"({atipicos / len(df) * 100:.2f}%) "
+        f"carregando R$ {valor_atipicos:,.2f} "
+        f"({valor_atipicos / valor_total * 100:.1f}% do total)"
+    )
     print(f"CSV: {caminho_csv} ({caminho_csv.stat().st_size / 1024**2:,.1f} MB)")
     print(f"ZIP: {caminho_zip} ({caminho_zip.stat().st_size / 1024**2:,.1f} MB)")
 
