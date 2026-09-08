@@ -20,6 +20,11 @@ ANOS: tuple[int, ...] = (2020, 2021, 2022, 2023, 2024, 2025, 2026)
 SEPARADOR = ";"
 CODIFICACAO = "utf-8"
 
+#: Coluna acrescentada pela leitura, ausente nos arquivos de origem. Quem
+#: descreve o esquema da fonte precisa descontá-la para não afirmar 26
+#: colunas onde o BPS publica 25.
+COLUNA_PROVENIENCIA = "arquivo_origem"
+
 
 def ler_ano(dir_raw: Path, ano: int) -> pd.DataFrame:
     """Lê um ano do BPS e acrescenta a coluna de proveniência.
@@ -43,7 +48,7 @@ def ler_ano(dir_raw: Path, ano: int) -> pd.DataFrame:
         dtype=str,
         low_memory=False,
     )
-    df["arquivo_origem"] = f"{ano}.csv"
+    df[COLUNA_PROVENIENCIA] = f"{ano}.csv"
     return df
 
 
