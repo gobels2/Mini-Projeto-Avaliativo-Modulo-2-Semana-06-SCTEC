@@ -2,6 +2,7 @@
 import pandas as pd
 
 from src.tratamento import (
+    calcular_flag_atipico,
     converter_datas,
     converter_numericos,
     corrigir_esfera,
@@ -142,3 +143,54 @@ def test_derivar_regiao_mapeia_as_cinco_regioes_e_o_desconhecido():
         "SUL",
         "NÃO INFORMADO",
     ]
+
+
+def _base_para_flag() -> pd.DataFrame:
+    """Grupo A com amostra suficiente e um preço 20x a mediana;
+    grupo B com apenas dois registros, abaixo do mínimo exigido."""
+    return pd.DataFrame(
+        {
+            "codigo_br": ["A"] * 5 + ["B"] * 2,
+            "unidade_fornecimento": ["AMPOLA"] * 7,
+            "preco_unitario": [10.0, 10.0, 10.0, 10.0, 200.0, 1.0, 500.0],
+        }
+    )
+
+
+def test_flag_marca_o_preco_desproporcional_do_grupo_com_amostra():
+    resultado = calcular_flag_atipico(_base_para_flag(), n_minimo=5, fator=10)
+
+    assert list(resultado["flag_preco_atipico"]) == [
+        False, False, False, False, True, False, False
+    ]
+
+
+def test_flag_calcula_a_razao_contra_a_mediana_do_grupo():
+    resultado = calcular_flag_atipico(_base_para_flag(), n_minimo=5, fator=10)
+
+    assert resultado.loc[4, "mediana_grupo"] == 10.0
+    assert resultado.loc[4, "razao_vs_mediana"] == 20.0
+
+
+def test_flag_poupa_grupos_pequenos_por_falta_de_base_de_comparacao():
+    """Dois registros não estabelecem o que é preço normal para um produto."""
+    resultado = calcular_flag_atipico(_base_para_flag(), n_minimo=5, fator=10)
+
+    grupo_b = resultado[resultado["codigo_br"] == "B"]
+    assert not grupo_b["flag_preco_atipico"].any()
+    assert list(grupo_b["n_grupo"]) == [2, 2]
+
+
+def test_flag_separa_grupos_por_unidade_de_fornecimento():
+    """Mesmo produto em AMPOLA e em BOLSA não é comparável."""
+    df = pd.DataFrame(
+        {
+            "codigo_br": ["A"] * 10,
+            "unidade_fornecimento": ["AMPOLA"] * 5 + ["BOLSA"] * 5,
+            "preco_unitario": [1.0] * 5 + [100.0] * 5,
+        }
+    )
+
+    resultado = calcular_flag_atipico(df, n_minimo=5, fator=10)
+
+    assert not resultado["flag_preco_atipico"].any()

@@ -135,3 +135,68 @@ def derivar_regiao(df: pd.DataFrame) -> pd.DataFrame:
     resultado = df.copy()
     resultado["regiao"] = resultado["uf"].map(UF_PARA_REGIAO).fillna(NAO_INFORMADO)
     return resultado
+
+
+N_MINIMO_GRUPO = 5
+FATOR_ATIPICO = 10.0
+
+CHAVE_COMPARACAO = ["codigo_br", "unidade_fornecimento"]
+
+
+def calcular_flag_atipico(
+    df: pd.DataFrame,
+    n_minimo: int = N_MINIMO_GRUPO,
+    fator: float = FATOR_ATIPICO,
+) -> pd.DataFrame:
+    """Sinaliza registros cujo preço unitário destoa dos comparáveis.
+
+    Comparar preço só faz sentido entre itens comparáveis, e o que define
+    comparabilidade aqui é o par (código CATMAT, unidade de fornecimento):
+    o mesmo cloreto de sódio em AMPOLA e em BOLSA não tem o mesmo preço por
+    unidade, e tratá-los como um grupo só produziria alarme falso.
+
+    Grupos com menos de `n_minimo` registros ficam de fora porque não
+    estabelecem o que é preço normal para aquele item.
+
+    O flag não afirma irregularidade. Aponta registros que merecem
+    verificação: diferenças legítimas de fabricante, apresentação,
+    quantidade, localidade, modalidade ou período explicam parte deles.
+    """
+    resultado = df.copy()
+    grupo = resultado.groupby(CHAVE_COMPARACAO)["preco_unitario"]
+
+    resultado["n_grupo"] = grupo.transform("size")
+    resultado["mediana_grupo"] = grupo.transform("median")
+    resultado["razao_vs_mediana"] = (
+        resultado["preco_unitario"] / resultado["mediana_grupo"]
+    )
+    resultado["flag_preco_atipico"] = (
+        (resultado["n_grupo"] >= n_minimo)
+        & (resultado["razao_vs_mediana"] >= fator)
+    )
+    return resultado
+
+
+def aplicar_tratamentos(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
+    """Roda o pipeline completo de tratamento na ordem correta.
+
+    A ordem importa: os tipos são convertidos antes do flag, que depende de
+    preço numérico; as duplicatas saem antes das derivações, para não gastar
+    cálculo em linha que vai embora.
+
+    Returns:
+        (base tratada, quantidade de duplicatas removidas).
+    """
+    resultado, duplicatas_removidas = remover_duplicatas(df)
+    resultado = converter_numericos(resultado)
+    resultado = converter_datas(resultado)
+    resultado = normalizar_descricao(resultado)
+    resultado = corrigir_esfera(resultado)
+    resultado["nome_instituicao"] = normalizar_espacos(
+        resultado["nome_instituicao"]
+    )
+    resultado = derivar_tipo_produto(resultado)
+    resultado = derivar_principio_ativo(resultado)
+    resultado = derivar_regiao(resultado)
+    resultado = calcular_flag_atipico(resultado)
+    return resultado, duplicatas_removidas
