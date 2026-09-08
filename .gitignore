@@ -1,0 +1,11 @@
+# Base consolidada: 126 MB, versionada apenas como .zip
+data/processed/*.csv
+
+# Roteiro do vídeo fica só no disco
+docs/roteiro_video.md
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
