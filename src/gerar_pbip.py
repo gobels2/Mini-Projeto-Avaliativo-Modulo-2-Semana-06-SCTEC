@@ -20,11 +20,17 @@ CAL = "dCalendario"
 S_PBIP = "https://developer.microsoft.com/json-schemas/fabric/pbip/pbipProperties/1.0.0/schema.json"
 S_PBISM = "https://developer.microsoft.com/json-schemas/fabric/item/semanticModel/definitionProperties/1.0.0/schema.json"
 S_PBIR = "https://developer.microsoft.com/json-schemas/fabric/item/report/definitionProperties/2.0.0/schema.json"
+# A família de schemas do PBIR está na revisão 2.x/3.x. A revisão 1.0.0 existe
+# e valida, mas o Power BI Desktop ignora silenciosamente uma definição que a
+# declara: abre o modelo, mostra o relatório vazio e não reescreve nada no
+# disco. Estes valores foram conferidos contra projetos PBIR reais, não contra
+# os exemplos da documentação, que ainda mostram a revisão antiga.
 S_VER = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/versionMetadata/1.0.0/schema.json"
-S_REPORT = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/1.0.0/schema.json"
+VERSAO_PBIR = "2.0.0"
+S_REPORT = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.0.0/schema.json"
 S_PAGES = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.0.0/schema.json"
-S_PAGE = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json"
-S_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json"
+S_PAGE = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json"
+S_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json"
 
 # (coluna, tipo TMSL, tipo M)
 COLUNAS = [
@@ -596,14 +602,17 @@ def main() -> None:
     })
 
     d = rp / "definition"
-    escrever(d / "version.json", {"$schema": S_VER, "version": "1.0.0"})
+    escrever(d / "version.json", {"$schema": S_VER, "version": VERSAO_PBIR})
     escrever(d / "report.json", {
         "$schema": S_REPORT,
-        "layoutOptimization": "None",
         "themeCollection": {
             "baseTheme": {
-                "name": "CY24SU06",
-                "reportVersionAtImport": "5.55",
+                "name": "CY19SU12",
+                "reportVersionAtImport": {
+                    "visual": "1.8.46",
+                    "report": "2.0.46",
+                    "page": "1.3.46",
+                },
                 "type": "SharedResources",
             }
         },
