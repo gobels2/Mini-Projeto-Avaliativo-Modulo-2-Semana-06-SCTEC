@@ -13,6 +13,11 @@ CACHE = Path(sys.argv[2]); CACHE.mkdir(parents=True, exist_ok=True)
 FALHAS_URL = {}
 
 def carregar(uri):
+    # Os schemas "*-embedded.json" da Microsoft declaram um $id com ponto
+    # ("schema.embedded.json") em vez do hifen do proprio endereco. Quem honra
+    # o $id ao resolver os $ref seguintes vai bater num 404. Nao e problema do
+    # projeto: e um defeito do schema publicado.
+    uri = uri.replace('schema.embedded.json', 'schema-embedded.json')
     nome = uri.replace('https://developer.microsoft.com/json-schemas/', '').replace('/', '_')
     p = CACHE / nome
     if not p.exists():
@@ -59,7 +64,12 @@ for f in alvos:
 
     v = Draft7Validator(esquema, resolver=RefResolver(
         base_uri=uri, referrer=esquema, handlers={'https': carregar, 'http': carregar}))
-    problemas = sorted(v.iter_errors(doc), key=lambda e: list(e.path))
+    try:
+        problemas = sorted(v.iter_errors(doc), key=lambda e: list(e.path))
+    except Exception as e:
+        erros.append((f, f'nao foi possivel resolver um $ref do schema: {str(e)[:120]}'))
+        falhas += 1
+        continue
     if problemas:
         falhas += 1
         for p in problemas[:3]:
