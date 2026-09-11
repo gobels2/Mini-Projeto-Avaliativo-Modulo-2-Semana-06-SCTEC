@@ -411,6 +411,14 @@
                 "value": "Automatic"
               }
             ]
+          },
+          {
+            "name": "instituicao",
+            "dataType": "string",
+            "type": "calculated",
+            "isDataTypeInferred": true,
+            "expression": "fBPS[nome_instituicao] & \" · \" & fBPS[uf]",
+            "summarizeBy": "none"
           }
         ],
         "measures": [

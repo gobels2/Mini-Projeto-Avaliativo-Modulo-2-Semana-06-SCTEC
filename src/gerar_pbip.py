@@ -120,6 +120,21 @@ def model_bim(csv_path: str) -> dict:
         if col["name"] in ("compra", "insercao"):
             col["formatString"] = "yyyy-mm-dd"
 
+    # Rótulo legível para o gráfico de instituições. O KPI continua contando
+    # cnpj_instituicao, que é exato (831). Este rótulo agrupa por nome + UF
+    # (694 combinações): 20 pares nome+UF abrigam mais de um CNPJ, então São
+    # Paulo aparece como R$ 22,06 bi em vez de R$ 21,89 bi. É uma aproximação
+    # de 0,8% em troca de um eixo legível — muito melhor que agrupar só por
+    # nome, que somava R$ 48,75 bi numa barra que não é instituição nenhuma.
+    colunas.append({
+        "name": "instituicao",
+        "dataType": "string",
+        "type": "calculated",
+        "isDataTypeInferred": True,
+        "expression": 'fBPS[nome_instituicao] & " · " & fBPS[uf]',
+        "summarizeBy": "none",
+    })
+
     medidas = [
         {
             "name": nome,
@@ -297,8 +312,83 @@ def visual_card(nome: str, medida: str, x, y, w, h) -> dict:
     }
 
 
+def filtro_topn(tabela_cat: str, coluna_cat: str, medida: str, n: int) -> dict:
+    """Filtro Top N do visual, equivalente ao "N Principais" do painel Filtros.
+
+    A estrutura é a do próprio Power BI: uma subconsulta ordenada pela medida
+    e cortada em `Top`, exposta no `From` como tabela de expressão (Type 2), e
+    um `In` no `Where` restringindo a categoria ao resultado dela.
+    """
+    return {
+        "name": f"topn_{coluna_cat}",
+        "displayName": f"Top {n} por {medida}",
+        "type": "TopN",
+        "howCreated": "User",
+        "field": campo_coluna(tabela_cat, coluna_cat),
+        "filter": {
+            "Version": 2,
+            "From": [
+                {"Name": "t", "Entity": tabela_cat, "Type": 0},
+                {
+                    "Name": "top",
+                    "Type": 2,
+                    "Expression": {
+                        "Subquery": {
+                            "Query": {
+                                "Version": 2,
+                                "From": [
+                                    {"Name": "s", "Entity": tabela_cat, "Type": 0},
+                                    {"Name": "m", "Entity": TABELA, "Type": 0},
+                                ],
+                                "Select": [
+                                    {
+                                        "Column": {
+                                            "Expression": {"SourceRef": {"Source": "s"}},
+                                            "Property": coluna_cat,
+                                        },
+                                        "Name": f"{tabela_cat}.{coluna_cat}",
+                                    }
+                                ],
+                                "OrderBy": [
+                                    {
+                                        "Direction": 2,
+                                        "Expression": {
+                                            "Measure": {
+                                                "Expression": {"SourceRef": {"Source": "m"}},
+                                                "Property": medida,
+                                            }
+                                        },
+                                    }
+                                ],
+                                "Top": n,
+                            }
+                        }
+                    },
+                },
+            ],
+            "Where": [
+                {
+                    "Condition": {
+                        "In": {
+                            "Expressions": [
+                                {
+                                    "Column": {
+                                        "Expression": {"SourceRef": {"Source": "t"}},
+                                        "Property": coluna_cat,
+                                    }
+                                }
+                            ],
+                            "Table": {"SourceRef": {"Source": "top"}},
+                        }
+                    }
+                }
+            ],
+        },
+    }
+
+
 def visual_categoria(nome, tipo, tabela_cat, coluna_cat, medida, x, y, w, h,
-                     texto_titulo, ordenar_desc=True) -> dict:
+                     texto_titulo, ordenar_desc=True, topn=None) -> dict:
     v = {
         "$schema": S_VISUAL,
         "name": nome,
@@ -327,6 +417,10 @@ def visual_categoria(nome, tipo, tabela_cat, coluna_cat, medida, x, y, w, h,
         v["visual"]["query"]["sortDefinition"] = {
             "sort": [{"field": campo_medida(medida), "direction": "Descending"}],
             "isDefaultSort": True,
+        }
+    if topn:
+        v["filterConfig"] = {
+            "filters": [filtro_topn(tabela_cat, coluna_cat, medida, topn)]
         }
     return v
 
@@ -393,7 +487,7 @@ def paginas() -> list[tuple[str, str, list[dict]]]:
         visual_categoria("por_principio", "clusteredBarChart", TABELA,
                          "principio_ativo", "Valor Total Registrado",
                          16, 410, 620, 296,
-                         "Princípios ativos e produtos por valor (aplicar Top 10)"),
+                         "Top 10 princípios ativos e produtos por valor", topn=10),
         visual_categoria("por_tipocompra", "clusteredBarChart", TABELA,
                          "tipo_compra", "Preço Unit. Médio Ponderado",
                          644, 410, 300, 296,
@@ -409,17 +503,17 @@ def paginas() -> list[tuple[str, str, list[dict]]]:
                          "Valor registrado por UF (24 de 27 - faltam AM, AP e DF)"),
         visual_categoria("por_municipio", "clusteredBarChart", TABELA,
                          "municipio_instituicao", "Valor Total Registrado",
-                         436, 12, 412, 340, "Municípios por valor (aplicar Top 10)"),
+                         436, 12, 412, 340, "Top 10 municípios por valor", topn=10),
         visual_categoria("por_instituicao", "clusteredBarChart", TABELA,
-                         "cnpj_instituicao", "Valor Total Registrado",
+                         "instituicao", "Valor Total Registrado",
                          856, 12, 400, 340,
-                         "Instituições por CNPJ, não por nome (aplicar Top 10)"),
+                         "Top 10 instituições compradoras (nome + UF)", topn=10),
         visual_categoria("por_fornecedor", "clusteredBarChart", TABELA,
                          "fornecedor", "Valor Total Registrado",
-                         16, 360, 412, 346, "Fornecedores por valor (aplicar Top 10)"),
+                         16, 360, 412, 346, "Top 10 fornecedores por valor", topn=10),
         visual_categoria("por_fabricante", "clusteredBarChart", TABELA,
                          "fabricante", "Valor Total Registrado",
-                         436, 360, 412, 346, "Fabricantes por valor (aplicar Top 10)"),
+                         436, 360, 412, 346, "Top 10 fabricantes por valor", topn=10),
         visual_categoria("por_esfera", "clusteredBarChart", TABELA, "esfera",
                          "Valor Total Registrado", 856, 360, 400, 346,
                          "Valor por esfera de governo"),
@@ -437,7 +531,8 @@ def paginas() -> list[tuple[str, str, list[dict]]]:
                          "Ranking de UF - alterne o filtro e veja PR e SP trocarem"),
         visual_categoria("razao_por_principio", "clusteredBarChart", TABELA,
                          "principio_ativo", "Valor Registros Atípicos",
-                         524, 134, 492, 280, "Valor atípico por produto (aplicar Top 10)"),
+                         524, 134, 492, 280,
+                         "Top 10 produtos por valor sinalizado", topn=10),
         visual_categoria("atipico_por_ano", "clusteredColumnChart", CAL, "Ano",
                          "Valor Registros Atípicos", 1024, 134, 232, 280,
                          "Valor atípico por ano", ordenar_desc=False),
