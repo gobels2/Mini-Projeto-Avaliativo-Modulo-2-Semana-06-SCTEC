@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/1.0.0/schema.json",
+  "name": "pagina3",
+  "displayName": "3. Investigação de Preços",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720
+}

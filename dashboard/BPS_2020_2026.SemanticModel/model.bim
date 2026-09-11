@@ -1,0 +1,572 @@
+{
+  "name": "BPS_2020_2026",
+  "compatibilityLevel": 1567,
+  "model": {
+    "culture": "pt-BR",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "pt-BR",
+    "tables": [
+      {
+        "name": "fBPS",
+        "lineageTag": "tabela-fbps",
+        "columns": [
+          {
+            "name": "ano_compra",
+            "dataType": "int64",
+            "sourceColumn": "ano_compra",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "nome_instituicao",
+            "dataType": "string",
+            "sourceColumn": "nome_instituicao",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "esfera",
+            "dataType": "string",
+            "sourceColumn": "esfera",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cnpj_instituicao",
+            "dataType": "string",
+            "sourceColumn": "cnpj_instituicao",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "municipio_instituicao",
+            "dataType": "string",
+            "sourceColumn": "municipio_instituicao",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "uf",
+            "dataType": "string",
+            "sourceColumn": "uf",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "compra",
+            "dataType": "dateTime",
+            "sourceColumn": "compra",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "insercao",
+            "dataType": "dateTime",
+            "sourceColumn": "insercao",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "formatString": "yyyy-mm-dd"
+          },
+          {
+            "name": "codigo_br",
+            "dataType": "string",
+            "sourceColumn": "codigo_br",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "descricao_catmat",
+            "dataType": "string",
+            "sourceColumn": "descricao_catmat",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "unidade_fornecimento",
+            "dataType": "string",
+            "sourceColumn": "unidade_fornecimento",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "generico",
+            "dataType": "string",
+            "sourceColumn": "generico",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "anvisa",
+            "dataType": "string",
+            "sourceColumn": "anvisa",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "modalidade_compra",
+            "dataType": "string",
+            "sourceColumn": "modalidade_compra",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "tipo_compra",
+            "dataType": "string",
+            "sourceColumn": "tipo_compra",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "capacidade",
+            "dataType": "double",
+            "sourceColumn": "capacidade",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "unidade_medida",
+            "dataType": "string",
+            "sourceColumn": "unidade_medida",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "unidade_fornecimento_capacidade",
+            "dataType": "string",
+            "sourceColumn": "unidade_fornecimento_capacidade",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cnpj_fornecedor",
+            "dataType": "string",
+            "sourceColumn": "cnpj_fornecedor",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "fornecedor",
+            "dataType": "string",
+            "sourceColumn": "fornecedor",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "cnpj_fabricante",
+            "dataType": "string",
+            "sourceColumn": "cnpj_fabricante",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "fabricante",
+            "dataType": "string",
+            "sourceColumn": "fabricante",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "qtd_itens_comprados",
+            "dataType": "double",
+            "sourceColumn": "qtd_itens_comprados",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preco_unitario",
+            "dataType": "double",
+            "sourceColumn": "preco_unitario",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "preco_total",
+            "dataType": "double",
+            "sourceColumn": "preco_total",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "arquivo_origem",
+            "dataType": "string",
+            "sourceColumn": "arquivo_origem",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "tipo_produto",
+            "dataType": "string",
+            "sourceColumn": "tipo_produto",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "principio_ativo",
+            "dataType": "string",
+            "sourceColumn": "principio_ativo",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "regiao",
+            "dataType": "string",
+            "sourceColumn": "regiao",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "n_grupo",
+            "dataType": "double",
+            "sourceColumn": "n_grupo",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "mediana_grupo",
+            "dataType": "double",
+            "sourceColumn": "mediana_grupo",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "razao_vs_mediana",
+            "dataType": "double",
+            "sourceColumn": "razao_vs_mediana",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "flag_preco_atipico",
+            "dataType": "boolean",
+            "sourceColumn": "flag_preco_atipico",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Valor Total Registrado",
+            "expression": "SUM(fBPS[preco_total])",
+            "formatString": "\"R$\" #,0;-\"R$\" #,0;\"R$\" #,0",
+            "lineageTag": "med-0"
+          },
+          {
+            "name": "Qtd Total de Itens",
+            "expression": "SUM(fBPS[qtd_itens_comprados])",
+            "formatString": "#,0",
+            "lineageTag": "med-1"
+          },
+          {
+            "name": "Nº de Registros",
+            "expression": "COUNTROWS(fBPS)",
+            "formatString": "#,0",
+            "lineageTag": "med-2"
+          },
+          {
+            "name": "Instituições Compradoras",
+            "expression": "DISTINCTCOUNT(fBPS[cnpj_instituicao])",
+            "formatString": "#,0",
+            "lineageTag": "med-3"
+          },
+          {
+            "name": "Fornecedores",
+            "expression": "DISTINCTCOUNT(fBPS[cnpj_fornecedor])",
+            "formatString": "#,0",
+            "lineageTag": "med-4"
+          },
+          {
+            "name": "Preço Unit. Médio Ponderado",
+            "expression": "DIVIDE([Valor Total Registrado], [Qtd Total de Itens])",
+            "formatString": "\"R$\" #,0.0000;-\"R$\" #,0.0000;\"R$\" #,0.0000",
+            "lineageTag": "med-5"
+          },
+          {
+            "name": "Valor Registros Atípicos",
+            "expression": "CALCULATE([Valor Total Registrado], fBPS[flag_preco_atipico] = TRUE())",
+            "formatString": "\"R$\" #,0;-\"R$\" #,0;\"R$\" #,0",
+            "lineageTag": "med-6"
+          },
+          {
+            "name": "% do Valor em Atípicos",
+            "expression": "DIVIDE([Valor Registros Atípicos], [Valor Total Registrado])",
+            "formatString": "0.0%",
+            "lineageTag": "med-7"
+          },
+          {
+            "name": "Preço Médio Pond. s/ Atípicos",
+            "expression": "CALCULATE([Preço Unit. Médio Ponderado], fBPS[flag_preco_atipico] = FALSE())",
+            "formatString": "\"R$\" #,0.0000;-\"R$\" #,0.0000;\"R$\" #,0.0000",
+            "lineageTag": "med-8"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fBPS-particao",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Fonte = Csv.Document(File.Contents(\"C:\\Users\\leona\\Desktop\\AI Ecommerce\\PROJETO FINAL LEO GOBEL TURMA 2\\MINIPROJETO M2S06\\Mini-Projeto-Avaliativo-Modulo-2-Semana-06-SCTEC\\data\\processed\\BPS_20_26_LeoGobel.csv\"), [Delimiter=\";\", Columns=33, Encoding=65001, QuoteStyle=QuoteStyle.Csv]),",
+                "    Promovido = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),",
+                "    Tipado = Table.TransformColumnTypes(Promovido, {{\"ano_compra\", Int64.Type}, {\"nome_instituicao\", type text}, {\"esfera\", type text}, {\"cnpj_instituicao\", type text}, {\"municipio_instituicao\", type text}, {\"uf\", type text}, {\"compra\", type date}, {\"insercao\", type date}, {\"codigo_br\", type text}, {\"descricao_catmat\", type text}, {\"unidade_fornecimento\", type text}, {\"generico\", type text}, {\"anvisa\", type text}, {\"modalidade_compra\", type text}, {\"tipo_compra\", type text}, {\"capacidade\", type number}, {\"unidade_medida\", type text}, {\"unidade_fornecimento_capacidade\", type text}, {\"cnpj_fornecedor\", type text}, {\"fornecedor\", type text}, {\"cnpj_fabricante\", type text}, {\"fabricante\", type text}, {\"qtd_itens_comprados\", type number}, {\"preco_unitario\", type number}, {\"preco_total\", type number}, {\"arquivo_origem\", type text}, {\"tipo_produto\", type text}, {\"principio_ativo\", type text}, {\"regiao\", type text}, {\"n_grupo\", type number}, {\"mediana_grupo\", type number}, {\"razao_vs_mediana\", type number}, {\"flag_preco_atipico\", type logical}}, \"en-US\")",
+                "in",
+                "    Tipado"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "dCalendario",
+        "lineageTag": "tabela-dcal",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "isKey": true,
+            "sourceColumn": "[Date]",
+            "formatString": "yyyy-mm-dd",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Ano",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Ano]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Mês",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Mês]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Nome do Mês",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Nome do Mês]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          },
+          {
+            "name": "Ano-Mês",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Ano-Mês]",
+            "summarizeBy": "none",
+            "type": "calculatedTableColumn"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dCalendario-particao",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "ADDCOLUMNS(\n    CALENDAR(MIN(fBPS[compra]), MAX(fBPS[compra])),\n    \"Ano\", YEAR([Date]),\n    \"Mês\", MONTH([Date]),\n    \"Nome do Mês\", FORMAT([Date], \"MMM\"),\n    \"Ano-Mês\", FORMAT([Date], \"YYYY-MM\")\n)"
+            }
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "rel-dcal-fbps",
+        "fromTable": "fBPS",
+        "fromColumn": "compra",
+        "toTable": "dCalendario",
+        "toColumn": "Date",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"fBPS\"]"
+      }
+    ]
+  }
+}

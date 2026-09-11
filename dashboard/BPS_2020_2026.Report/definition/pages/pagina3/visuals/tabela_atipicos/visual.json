@@ -1,0 +1,184 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/1.0.0/schema.json",
+  "name": "tabela_atipicos",
+  "position": {
+    "x": 16,
+    "y": 422,
+    "width": 1240,
+    "height": 284,
+    "z": 0
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "ano_compra"
+                }
+              },
+              "queryRef": "fBPS.ano_compra",
+              "nativeQueryRef": "ano_compra"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "uf"
+                }
+              },
+              "queryRef": "fBPS.uf",
+              "nativeQueryRef": "uf"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "nome_instituicao"
+                }
+              },
+              "queryRef": "fBPS.nome_instituicao",
+              "nativeQueryRef": "nome_instituicao"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "principio_ativo"
+                }
+              },
+              "queryRef": "fBPS.principio_ativo",
+              "nativeQueryRef": "principio_ativo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "unidade_fornecimento"
+                }
+              },
+              "queryRef": "fBPS.unidade_fornecimento",
+              "nativeQueryRef": "unidade_fornecimento"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "qtd_itens_comprados"
+                }
+              },
+              "queryRef": "fBPS.qtd_itens_comprados",
+              "nativeQueryRef": "qtd_itens_comprados"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "preco_unitario"
+                }
+              },
+              "queryRef": "fBPS.preco_unitario",
+              "nativeQueryRef": "preco_unitario"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "mediana_grupo"
+                }
+              },
+              "queryRef": "fBPS.mediana_grupo",
+              "nativeQueryRef": "mediana_grupo"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "razao_vs_mediana"
+                }
+              },
+              "queryRef": "fBPS.razao_vs_mediana",
+              "nativeQueryRef": "razao_vs_mediana"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "fBPS"
+                    }
+                  },
+                  "Property": "Valor Total Registrado"
+                }
+              },
+              "queryRef": "fBPS.Valor Total Registrado",
+              "nativeQueryRef": "Valor Total Registrado"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Registros a verificar - filtre flag_preco_atipico = Verdadeiro'"
+                }
+              }
+            },
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
