@@ -1591,18 +1591,31 @@ Divergência aqui significa erro de tipo na importação — voltar ao Step 4 an
 
 Seis cartões de KPI no topo, na ordem do enunciado. Abaixo, quatro visuais:
 
-1. **Gráfico de colunas e linhas agrupadas** — eixo `dCalendario[Ano]`, colunas `Valor Total Registrado`, linha `Preço Unit. Médio Ponderado`.
+1. **Dois gráficos separados**, não um de colunas e linhas agrupadas:
+   **(a)** colunas — eixo `dCalendario[Ano]`, valor `Valor Total Registrado`;
+   **(b)** linhas — eixo `dCalendario[Ano]`, valor `Preço Unit. Médio Ponderado`.
+   Sobrepor os dois num só visual cria um gráfico de eixo duplo: R$ 34,9 bi e
+   R$ 1,37 não compartilham escala, e o alinhamento arbitrário dos dois eixos
+   sugere ao leitor uma correlação que não está nos dados. Separados, cada
+   série é lida na própria grandeza.
 2. **Gráfico de barras empilhadas** — eixo `modalidade_compra`, valor `Valor Total Registrado`.
-3. **Gráfico de rosca** — legenda `tipo_produto`, valor `Nº de Registros`.
+3. **Barra 100% empilhada** — `tipo_produto` por `Nº de Registros`. Não rosca:
+   `tipo_produto` tem só dois valores, e uma pizza de duas fatias é sempre pior
+   que uma barra ou que os dois números.
 4. **Gráfico de barras** — eixo `principio_ativo` (10 principais por valor), valor `Valor Total Registrado`.
 
 - [ ] **Step 10: Montar a página 2 — Geografia e Instituições**
 
 1. **Mapa coroplético** — localização `uf`, saturação `Valor Total Registrado`.
 2. **Barras** — `municipio_instituicao`, 10 principais por `Valor Total Registrado`.
-3. **Barras** — `nome_instituicao`, 10 principais por `Valor Total Registrado`.
+3. **Barras** — `cnpj_instituicao`, 10 principais por `Valor Total Registrado`,
+   rotuladas com `nome_instituicao` + `uf`. **Agrupar por nome está errado aqui:**
+   nove CNPJs distintos, em ES, GO, PR e SP, se chamam "SECRETARIA DE ESTADO DA
+   SAUDE", e agrupar por nome soma R$ 48,75 bi numa barra que não corresponde a
+   instituição nenhuma. Por CNPJ: PR R$ 24,88 bi e SP R$ 21,89 bi, separados.
 4. **Tabela** — `fornecedor`, `fabricante`, `Valor Total Registrado`, `Nº de Registros`.
-5. **Rosca** — `esfera` por `Valor Total Registrado`.
+5. **Barras** — `esfera` por `Valor Total Registrado`. Não rosca: os valores são
+   extremamente desiguais (o municipal domina) e fatias finas não se comparam.
 
 - [ ] **Step 11: Montar a página 3 — Investigação de Preços**
 
