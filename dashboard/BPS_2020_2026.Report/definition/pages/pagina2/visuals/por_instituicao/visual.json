@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "por_instituicao",
   "position": {
     "x": 856,
     "y": 12,
-    "width": 400,
+    "z": 0,
     "height": 340,
-    "z": 0
+    "width": 400
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "fBPS.instituicao",
-              "nativeQueryRef": "instituicao"
+              "nativeQueryRef": "instituicao",
+              "active": true
             }
           ]
         },
@@ -96,8 +97,6 @@
       {
         "name": "topn_instituicao",
         "displayName": "Top 10 por Valor Total Registrado",
-        "type": "TopN",
-        "howCreated": "User",
         "field": {
           "Column": {
             "Expression": {
@@ -108,6 +107,7 @@
             "Property": "instituicao"
           }
         },
+        "type": "TopN",
         "filter": {
           "Version": 2,
           "From": [
@@ -118,7 +118,6 @@
             },
             {
               "Name": "top",
-              "Type": 2,
               "Expression": {
                 "Subquery": {
                   "Query": {
@@ -166,7 +165,8 @@
                     "Top": 10
                   }
                 }
-              }
+              },
+              "Type": 2
             }
           ],
           "Where": [
@@ -194,7 +194,8 @@
               }
             }
           ]
-        }
+        },
+        "howCreated": "User"
       }
     ]
   }

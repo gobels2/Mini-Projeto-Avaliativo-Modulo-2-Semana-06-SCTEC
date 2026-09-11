@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "preco_por_ano",
   "position": {
     "x": 436,
     "y": 112,
-    "width": 412,
+    "z": 0,
     "height": 290,
-    "z": 0
+    "width": 412
   },
   "visual": {
     "visualType": "lineChart",
@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "dCalendario.Ano",
-              "nativeQueryRef": "Ano"
+              "nativeQueryRef": "Ano",
+              "active": true
             }
           ]
         },

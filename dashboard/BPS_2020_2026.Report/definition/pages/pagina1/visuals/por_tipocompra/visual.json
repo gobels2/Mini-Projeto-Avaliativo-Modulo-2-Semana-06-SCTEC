@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "por_tipocompra",
   "position": {
     "x": 644,
     "y": 410,
-    "width": 300,
+    "z": 0,
     "height": 296,
-    "z": 0
+    "width": 300
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "fBPS.tipo_compra",
-              "nativeQueryRef": "tipo_compra"
+              "nativeQueryRef": "tipo_compra",
+              "active": true
             }
           ]
         },

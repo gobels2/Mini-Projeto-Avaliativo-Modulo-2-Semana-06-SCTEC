@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "uf_flag",
   "position": {
     "x": 16,
     "y": 134,
-    "width": 500,
+    "z": 0,
     "height": 280,
-    "z": 0
+    "width": 500
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "fBPS.uf",
-              "nativeQueryRef": "uf"
+              "nativeQueryRef": "uf",
+              "active": true
             }
           ]
         },

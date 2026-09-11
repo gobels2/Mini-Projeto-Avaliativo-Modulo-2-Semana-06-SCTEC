@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "atipico_por_ano",
   "position": {
     "x": 1024,
     "y": 134,
-    "width": 232,
+    "z": 0,
     "height": 280,
-    "z": 0
+    "width": 232
   },
   "visual": {
     "visualType": "clusteredColumnChart",
@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "dCalendario.Ano",
-              "nativeQueryRef": "Ano"
+              "nativeQueryRef": "Ano",
+              "active": true
             }
           ]
         },
