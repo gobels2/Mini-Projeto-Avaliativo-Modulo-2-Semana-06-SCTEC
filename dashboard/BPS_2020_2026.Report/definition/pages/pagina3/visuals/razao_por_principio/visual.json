@@ -75,7 +75,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Valor atípico por produto (aplicar Top 10)'"
+                  "Value": "'Top 10 produtos por valor sinalizado'"
                 }
               }
             },
@@ -90,5 +90,112 @@
         }
       ]
     }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "topn_principio_ativo",
+        "displayName": "Top 10 por Valor Registros Atípicos",
+        "type": "TopN",
+        "howCreated": "User",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "fBPS"
+              }
+            },
+            "Property": "principio_ativo"
+          }
+        },
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "t",
+              "Entity": "fBPS",
+              "Type": 0
+            },
+            {
+              "Name": "top",
+              "Type": 2,
+              "Expression": {
+                "Subquery": {
+                  "Query": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "s",
+                        "Entity": "fBPS",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "m",
+                        "Entity": "fBPS",
+                        "Type": 0
+                      }
+                    ],
+                    "Select": [
+                      {
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "s"
+                            }
+                          },
+                          "Property": "principio_ativo"
+                        },
+                        "Name": "fBPS.principio_ativo"
+                      }
+                    ],
+                    "OrderBy": [
+                      {
+                        "Direction": 2,
+                        "Expression": {
+                          "Measure": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Source": "m"
+                              }
+                            },
+                            "Property": "Valor Registros Atípicos"
+                          }
+                        }
+                      }
+                    ],
+                    "Top": 10
+                  }
+                }
+              }
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "t"
+                          }
+                        },
+                        "Property": "principio_ativo"
+                      }
+                    }
+                  ],
+                  "Table": {
+                    "SourceRef": {
+                      "Source": "top"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
 }

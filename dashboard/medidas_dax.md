@@ -1,7 +1,21 @@
 # Medidas DAX do dashboard
 
-Referência das medidas usadas em `BPS_2020_2026.pbix`. Cada bloco é para colar
-direto em **Modelagem > Nova medida** no Power BI Desktop.
+Referência das medidas usadas no dashboard. **O projeto
+`BPS_2020_2026.pbip` já traz todas elas prontas** — este documento existe para
+documentar as fórmulas e permitir reconstruir o modelo do zero, não porque
+alguma coisa precise ser digitada à mão.
+
+O projeto já inclui também:
+
+- os filtros **Top 10** nos seis gráficos de ranking (princípio ativo, município,
+  instituição, fornecedor, fabricante e produtos sinalizados);
+- a coluna calculada `instituicao` = `nome_instituicao & " · " & uf`, usada como
+  rótulo no gráfico de instituições. O KPI continua contando `cnpj_instituicao`,
+  que é exato (831). O rótulo agrupa por nome + UF (694 combinações): 20 pares
+  nome+UF abrigam mais de um CNPJ, então São Paulo aparece como R$ 22,06 bi em
+  vez de R$ 21,89 bi — 0,8% de aproximação em troca de um eixo legível. Agrupar
+  só por nome, sem a UF, somaria R$ 48,75 bi numa barra que não corresponde a
+  instituição nenhuma.
 
 A tabela de fatos chama-se `fBPS` e vem de
 `data/processed/BPS_20_26_LeoGobel.csv`.
