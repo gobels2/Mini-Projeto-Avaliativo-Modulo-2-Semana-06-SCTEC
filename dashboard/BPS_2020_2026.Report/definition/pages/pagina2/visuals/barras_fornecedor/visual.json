@@ -3,10 +3,10 @@
   "name": "barras_fornecedor",
   "position": {
     "x": 1186,
-    "y": 566,
+    "y": 630,
     "z": 0,
     "width": 452,
-    "height": 268
+    "height": 254
   },
   "visual": {
     "visualType": "clusteredBarChart",

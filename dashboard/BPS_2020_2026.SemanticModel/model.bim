@@ -496,7 +496,7 @@
           {
             "name": "instituicao",
             "dataType": "string",
-            "expression": "fBPS[nome_instituicao] & \" · \" & fBPS[uf]",
+            "expression": "fBPS[uf] & \" · \" & fBPS[nome_instituicao]",
             "isDataTypeInferred": true,
             "lineageTag": "f81a5e32-ead9-49ad-9007-c98118ffd1f4",
             "summarizeBy": "none",

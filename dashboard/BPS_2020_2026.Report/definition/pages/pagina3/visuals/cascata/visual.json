@@ -149,10 +149,10 @@
                 }
               }
             },
-            "gridlineThickness": {
+            "end": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "40000000000D"
                 }
               }
             }

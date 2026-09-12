@@ -137,7 +137,7 @@ def model_bim(csv_path: str) -> dict:
         "dataType": "string",
         "type": "calculated",
         "isDataTypeInferred": True,
-        "expression": 'fBPS[nome_instituicao] & " · " & fBPS[uf]',
+        "expression": 'fBPS[uf] & " · " & fBPS[nome_instituicao]',
         "summarizeBy": "none",
     })
 
