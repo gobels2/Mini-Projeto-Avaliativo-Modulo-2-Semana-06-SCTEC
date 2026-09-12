@@ -85,6 +85,11 @@ def o(**p) -> list:
     return [{"properties": p}]
 
 
+def largura_coluna(ref: str, px: int) -> dict:
+    """Largura fixa de uma coluna da tabela, endereçada pelo queryRef."""
+    return {"properties": {"value": num(px)}, "selector": {"metadata": ref}}
+
+
 def o_estado(mostrar: bool, **p) -> list:
     """Objeto com estado nomeado.
 
@@ -354,7 +359,7 @@ def pagina2() -> list:
     vs = trilho(1) + faixa_kpis("p2")
     vs.append(rotulo_texto("t2", "Geografia e Instituições", x0, 24, 700, 46, 24))
     vs += [
-        visual("arvore", "decompositionTreeVisual", x0, 182, 700, 372,
+        visual("arvore", "decompositionTreeVisual", x0, 182, 700, 436,
                # Os papéis da árvore são "Analyze" e "ExplainBy" — com
                # "Analysis"/"Group" o visual carrega mas exibe
                # "No field to analyze".
@@ -364,13 +369,13 @@ def pagina2() -> list:
                               proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")]},
                "Clique para abrir região, UF e instituição",
                {}),
-        visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 372,
+        visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 436,
                {"Category": [proj(col(TABELA, "uf"), f"{TABELA}.uf")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por UF — 24 de 27, sem AM, AP e DF",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado"),
-        visual("donut_esfera", "donutChart", x0 + 1066, 182, 330, 372,
+        visual("donut_esfera", "donutChart", x0 + 1066, 182, 330, 436,
                {"Category": [proj(col(TABELA, "esfera"), f"{TABELA}.esfera")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por esfera de governo",
@@ -378,20 +383,20 @@ def pagina2() -> list:
                             labelColor=cor(TINTA2), showTitle=bol(False)),
                 "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "slices": o(innerRadiusRatio=num(60))}),
-        visual("barras_municipio", "clusteredBarChart", x0, 566, 460, 268,
+        visual("barras_municipio", "clusteredBarChart", x0, 630, 460, 254,
                {"Category": [proj(col(TABELA, "municipio_instituicao"), f"{TABELA}.municipio_instituicao")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 municípios",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado", topn=10,
                cat=(TABELA, "municipio_instituicao")),
-        visual("barras_instituicao", "clusteredBarChart", x0 + 472, 566, 460, 268,
+        visual("barras_instituicao", "clusteredBarChart", x0 + 472, 630, 460, 254,
                {"Category": [proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 instituições compradoras",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado", topn=10, cat=(TABELA, "instituicao")),
-        visual("barras_fornecedor", "clusteredBarChart", x0 + 944, 566, 452, 268,
+        visual("barras_fornecedor", "clusteredBarChart", x0 + 944, 630, 452, 254,
                {"Category": [proj(col(TABELA, "fornecedor"), f"{TABELA}.fornecedor")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 fornecedores",
@@ -416,6 +421,12 @@ def pagina3() -> list:
                 "Y": [proj(med("Valor Registros Atípicos"), f"{TABELA}.Valor Registros Atípicos")]},
                "Contribuição do valor sinalizado, ano a ano",
                {**eixos(True, VERMELHO),
+                # O total bate em R$ 34 bi; sem teto explicito a barra
+                # encosta no topo e o rotulo sai cortado.
+                "valueAxis": o(show=bol(True), showAxisTitle=bol(False),
+                               fontSize=num(11), labelColor=cor(TINTA2),
+                               gridlineShow=bol(True), gridlineColor=cor(BORDA),
+                               end=num(40000000000)),
                 "sentimentColors": o(increaseFill=cor(VERMELHO), decreaseFill=cor(TEAL),
                                      totalFill=cor(AZUL))}),
         visual("dispersao", "scatterChart", x0 + 974, 182, 422, 360,
@@ -438,7 +449,6 @@ def pagina3() -> list:
         visual("tabela", "tableEx", x0, 556, 1396, 280,
                {"Values": [
                    proj(col(TABELA, "ano_compra"), f"{TABELA}.ano_compra"),
-                   proj(col(TABELA, "uf"), f"{TABELA}.uf"),
                    proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao"),
                    proj(col(TABELA, "principio_ativo"), f"{TABELA}.principio_ativo"),
                    proj(col(TABELA, "unidade_fornecimento"), f"{TABELA}.unidade_fornecimento"),
@@ -451,13 +461,27 @@ def pagina3() -> list:
                # A tabela usa fontColorPrimary/backColorPrimary (e o par
                # Secondary das linhas alternadas). Com fontColor/backColor o
                # JSON passa mas as linhas ficam brancas sobre o tema escuro.
+               # Sem largura fixa o Power BI dá ~metade da tabela à coluna de
+               # instituição e empurra preço, mediana e razão — que são o
+               # ponto da página — para fora da barra de rolagem.
                {"grid": o(gridVertical=bol(False), gridHorizontalColor=cor(BORDA),
                           rowPadding=num(4)),
                 "columnHeaders": o(fontSize=num(11), bold=bol(True),
                                    fontColor=cor(TINTA), backColor=cor(RAIL_BG)),
                 "values": o(fontSize=num(11),
                             fontColorPrimary=cor(TINTA), backColorPrimary=cor(CARTAO),
-                            fontColorSecondary=cor(TINTA), backColorSecondary=cor(RAIL_BG))},
+                            fontColorSecondary=cor(TINTA), backColorSecondary=cor(RAIL_BG)),
+                "columnWidth": [
+                    largura_coluna(f"{TABELA}.ano_compra", 70),
+                    largura_coluna(f"{TABELA}.instituicao", 300),
+                    largura_coluna(f"{TABELA}.principio_ativo", 200),
+                    largura_coluna(f"{TABELA}.unidade_fornecimento", 150),
+                    largura_coluna(f"{TABELA}.qtd_itens_comprados", 125),
+                    largura_coluna(f"{TABELA}.preco_unitario", 120),
+                    largura_coluna(f"{TABELA}.mediana_grupo", 120),
+                    largura_coluna(f"{TABELA}.razao_vs_mediana", 105),
+                    largura_coluna(f"{TABELA}.Valor Total Registrado", 140),
+                ]},
                sort_med="Valor Total Registrado"),
     ]
     return vs

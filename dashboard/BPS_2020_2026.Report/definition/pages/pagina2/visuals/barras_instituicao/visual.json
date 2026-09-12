@@ -3,10 +3,10 @@
   "name": "barras_instituicao",
   "position": {
     "x": 714,
-    "y": 566,
+    "y": 630,
     "z": 0,
     "width": 460,
-    "height": 268
+    "height": 254
   },
   "visual": {
     "visualType": "clusteredBarChart",
