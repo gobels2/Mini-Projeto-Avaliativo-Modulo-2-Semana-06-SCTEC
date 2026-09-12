@@ -112,8 +112,16 @@ def col(tab: str, nome: str) -> dict:
     return {"Column": {"Expression": {"SourceRef": {"Entity": tab}}, "Property": nome}}
 
 
-def proj(campo: dict, ref: str) -> dict:
-    return {"field": campo, "queryRef": ref, "active": True}
+def proj(campo: dict, ref: str, rotulo: str | None = None) -> dict:
+    """Projeção de um campo no visual.
+
+    `rotulo` vira o cabeçalho exibido. Sem ele a tabela mostra o nome cru da
+    coluna — "ano_co mpra", "razao_vs_med iana" — quebrando no meio da palavra.
+    """
+    p = {"field": campo, "queryRef": ref, "active": True}
+    if rotulo:
+        p["displayName"] = rotulo
+    return p
 
 
 def moldura(titulo: str | None, cor_titulo: str = TINTA) -> dict:
@@ -448,15 +456,15 @@ def pagina3() -> list:
                sort_med="Valor Registros Atípicos"),
         visual("tabela", "tableEx", x0, 556, 1396, 280,
                {"Values": [
-                   proj(col(TABELA, "ano_compra"), f"{TABELA}.ano_compra"),
-                   proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao"),
-                   proj(col(TABELA, "principio_ativo"), f"{TABELA}.principio_ativo"),
-                   proj(col(TABELA, "unidade_fornecimento"), f"{TABELA}.unidade_fornecimento"),
-                   proj(col(TABELA, "qtd_itens_comprados"), f"{TABELA}.qtd_itens_comprados"),
-                   proj(col(TABELA, "preco_unitario"), f"{TABELA}.preco_unitario"),
-                   proj(col(TABELA, "mediana_grupo"), f"{TABELA}.mediana_grupo"),
-                   proj(col(TABELA, "razao_vs_mediana"), f"{TABELA}.razao_vs_mediana"),
-                   proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
+                   proj(col(TABELA, "ano_compra"), f"{TABELA}.ano_compra", "Ano"),
+                   proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao", "Instituição"),
+                   proj(col(TABELA, "principio_ativo"), f"{TABELA}.principio_ativo", "Produto"),
+                   proj(col(TABELA, "unidade_fornecimento"), f"{TABELA}.unidade_fornecimento", "Unidade"),
+                   proj(col(TABELA, "qtd_itens_comprados"), f"{TABELA}.qtd_itens_comprados", "Quantidade"),
+                   proj(col(TABELA, "preco_unitario"), f"{TABELA}.preco_unitario", "Preço unitário"),
+                   proj(col(TABELA, "mediana_grupo"), f"{TABELA}.mediana_grupo", "Mediana do grupo"),
+                   proj(col(TABELA, "razao_vs_mediana"), f"{TABELA}.razao_vs_mediana", "Razão"),
+                   proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado", "Valor total")]},
                "Registros a verificar — maiores valores da base",
                # A tabela usa fontColorPrimary/backColorPrimary (e o par
                # Secondary das linhas alternadas). Com fontColor/backColor o
