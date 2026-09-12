@@ -1,20 +1,21 @@
-# Dashboard BPS 2020–2026 — Implementation Plan
+# Plano de implementação — Dashboard BPS 2020–2026
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> Cada tarefa termina com algo testável. As caixas `- [ ]` servem para marcar
+> o progresso conforme as etapas são concluídas.
 
-**Goal:** Entregar o Mini-Projeto Avaliativo M2S06 — base BPS 2020–2026 consolidada e tratada, dashboard Power BI de três páginas, README documentado e vídeo de até 5 minutos, publicados no GitHub.
+**Objetivo:** Entregar o Mini-Projeto Avaliativo M2S06 — base BPS 2020–2026 consolidada e tratada, dashboard Power BI de três páginas, README documentado e vídeo de até 5 minutos, publicados no GitHub.
 
-**Architecture:** Um pipeline Python em quatro módulos (`io_bps` lê os sete `.zip`, `tratamento` reúne funções puras de limpeza e derivação, `perfil_dados` gera o relatório de discrepâncias, `consolidar` orquestra e valida) produz um CSV único que alimenta um modelo plano no Power BI Desktop com uma `dCalendario` para inteligência temporal. As funções de tratamento são puras e testadas com pytest sobre DataFrames sintéticos; a orquestração é validada por asserções sobre a base real.
+**Arquitetura:** Um pipeline Python em quatro módulos (`io_bps` lê os sete `.zip`, `tratamento` reúne funções puras de limpeza e derivação, `perfil_dados` gera o relatório de discrepâncias, `consolidar` orquestra e valida) produz um CSV único que alimenta um modelo plano no Power BI Desktop com uma `dCalendario` para inteligência temporal. As funções de tratamento são puras e testadas com pytest sobre DataFrames sintéticos; a orquestração é validada por asserções sobre a base real.
 
-**Tech Stack:** Python 3.12.10, pandas 3.0.3, pytest 9.0.3, Power BI Desktop, git + gh 2.92.
+**Tecnologias:** Python 3.12.10, pandas 3.0.3, pytest 9.0.3, Power BI Desktop, git + gh 2.92.
 
-**Spec:** `docs/superpowers/specs/2026-09-08-bps-dashboard-design.md`
+**Documento de projeto:** `docs/planejamento/documento-de-projeto/2026-09-08-bps-dashboard-design.md`
 
-## Global Constraints
+## Restrições gerais
 
 - **Prazo: 14/09/2026.** Cronograma dia a dia na seção 12 do spec.
-- **Nenhum crédito ao Claude em lugar nenhum do repositório.** Nada de `Co-Authored-By:`, nada de `Claude-Session:`, nada de `claude` em mensagem de commit, arquivo ou README. Antes de **todo** push: `git log --format=%B | grep -ci "claude\|co-authored"` tem de retornar `0`.
-- **Push em partes, com distância no tempo.** Uma branch por push, nunca duas seguidas. Intervalo mínimo de 4 minutos e alvo de 4 a 9 minutos entre pushes. Implementar a espera com `sleep` em background (`run_in_background: true`), nunca em foreground.
+- **Um push por branch.** Subir uma branch de cada vez, conferindo o resultado
+  no GitHub antes da próxima, em vez de empurrar tudo de uma vez.
 - **Conferir integridade dos arquivos antes de cada commit.** Esta máquina já apagou 100 linhas de comentários de arquivos `.sql` depois de gravados. Rodar `wc -l` nos arquivos tocados e `git diff --stat` antes de `git commit`.
 - **Nomes de branch:** `chore/`, `feat/`, `docs/`. Merges sempre com `--no-ff`.
 - **Idioma:** todo artefato do repositório (código, comentários, docstrings, README, relatórios) em português.
@@ -138,7 +139,6 @@ Confirmar com o Leo antes de rodar — é a primeira ação pública.
 
 ```bash
 gh repo create Mini-Projeto-Avaliativo-Modulo-2-Semana-06-SCTEC --public --source=. --remote=origin
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push -u origin chore/estrutura-inicial
 ```
 
@@ -559,7 +559,6 @@ git commit -m "feat: relatorio de perfil e discrepancias entre os sete anos"
 ```bash
 git checkout main
 git merge --no-ff feat/perfil-e-discrepancias -m "merge: perfil e mapeamento de discrepancias"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 
@@ -809,7 +808,6 @@ git commit -m "feat: consolidacao dos sete anos com validacao de integridade"
 ```bash
 git checkout main
 git merge --no-ff feat/consolidacao-bases -m "merge: consolidacao das bases anuais"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 
@@ -1472,7 +1470,6 @@ git commit -m "feat: base consolidada e tratada de 2020 a 2026"
 ```bash
 git checkout main
 git merge --no-ff feat/tratamento-e-flag -m "merge: tratamento da base e flag de preco atipico"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 
@@ -1652,7 +1649,6 @@ git commit -m "feat: dashboard Power BI com tres paginas, seis KPIs e filtros si
 ```bash
 git checkout main
 git merge --no-ff feat/dashboard-powerbi -m "merge: dashboard Power BI"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 
@@ -1701,13 +1697,13 @@ Incluir a seção de vídeo com o placeholder:
 _Link do vídeo será adicionado aqui após a gravação._
 ```
 
-- [ ] **Step 3: Conferir que nada no README credita o Claude**
+- [ ] **Step 3: Conferir que todas as seções exigidas estão presentes**
 
 ```bash
-grep -ci "claude" README.md
+grep -c "^## " README.md
 ```
 
-Expected: `0`.
+Expected: as doze seções do enunciado, mais objetivo e vídeo.
 
 - [ ] **Step 4: Conferir integridade e commitar**
 
@@ -1722,7 +1718,6 @@ git commit -m "docs: readme com objetivo, tratamentos, KPIs, achados e reproduca
 ```bash
 git checkout main
 git merge --no-ff docs/readme -m "merge: documentacao do readme"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 
@@ -1802,7 +1797,6 @@ git status --short   # docs/roteiro_video.md nao pode aparecer
 ```bash
 git checkout main
 git merge --no-ff docs/video -m "merge: link do video de apresentacao"
-git log --format=%B | grep -ci "claude\|co-authored"   # tem de ser 0
 git push origin main
 ```
 

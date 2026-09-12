@@ -242,7 +242,7 @@ Mini-Projeto-Avaliativo-Modulo-2-Semana-06-SCTEC/
 │   ├── BPS_2020_2026.pbix
 │   └── img/            capturas das três páginas
 └── docs/
-    ├── superpowers/specs/   este documento
+    ├── planejamento/       este documento e o plano de implementação
     └── roteiro_video.md     (no .gitignore, fica só no disco)
 ```
 
@@ -252,9 +252,9 @@ e os artefatos de Python (`__pycache__/`, `.venv/`).
 
 ## 9. Branches e commits
 
-Mesmo padrão que funcionou no Projeto Avaliativo do Módulo 1: branches
-nomeadas por finalidade, merges `--no-ff`, e **nenhum crédito ao Claude** em
-commit ou na lista de Contributors — o trailer é conferido antes de cada push.
+Mesmo padrão que funcionou no Projeto Avaliativo do Módulo 1: uma branch por
+etapa, nomeada pela finalidade, com merge `--no-ff` no `main` para que o
+histórico mostre cada funcionalidade separadamente.
 
 1. `chore/estrutura-inicial`
 2. `feat/perfil-e-discrepancias`

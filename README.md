@@ -310,7 +310,7 @@ está versionado pronto):
 ```bash
 python src/gerar_pbip.py dashboard "<caminho absoluto do BPS_20_26_LeoGobel.csv>"
 python src/gerar_dashboard.py     # aplica layout, tema escuro e os 55 visuais
-python src/validar_pbip.py dashboard .cache-schemas   # confere contra os schemas oficiais
+python src/validar_pbip.py dashboard .cache-schemas   # confere contra os schemas oficiais da Microsoft
 ```
 
 ### Abrir o dashboard
@@ -351,5 +351,12 @@ ISO; ler como pt-BR multiplicaria os valores por dez).
 │   ├── medidas_dax.md               definição de todas as medidas
 │   └── img/                         capturas das três páginas
 └── docs/
-    └── perfil_discrepancias.md
+    ├── perfil_discrepancias.md      relatório gerado por script
+    └── planejamento/
+        ├── documento-de-projeto/     escopo, decisões e critérios de aceite
+        └── plano-de-implementacao/   as tarefas, na ordem em que foram feitas
 ```
+
+As duas pastas em `docs/planejamento/` foram escritas **antes** do código: a
+primeira define o que o projeto precisa entregar e por quê, a segunda quebra
+isso nas tarefas que viraram as branches deste repositório.
