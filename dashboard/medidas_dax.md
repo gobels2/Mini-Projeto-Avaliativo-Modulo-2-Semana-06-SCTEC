@@ -9,7 +9,7 @@ O projeto já inclui também:
 
 - os filtros **Top 10** nos seis gráficos de ranking (princípio ativo, município,
   instituição, fornecedor, fabricante e produtos sinalizados);
-- a coluna calculada `instituicao` = `nome_instituicao & " · " & uf`, usada como
+- a coluna calculada `instituicao` = `uf & " · " & nome_instituicao`, usada como
   rótulo no gráfico de instituições. O KPI continua contando `cnpj_instituicao`,
   que é exato (831). O rótulo agrupa por nome + UF (694 combinações): 20 pares
   nome+UF abrigam mais de um CNPJ, então São Paulo aparece como R$ 22,06 bi em

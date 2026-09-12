@@ -205,9 +205,31 @@ pago por unidade.
 ### Página 3 — Investigação de Preços
 ![Investigação de Preços](dashboard/img/p3-investigacao-precos.png)
 
-O arquivo editável está em `dashboard/BPS_2020_2026.pbix`. São **13 visuais**
-além dos seis cartões de KPI, com segmentações sincronizadas de Ano, UF,
-Esfera, Modalidade, Tipo de produto e Flag de preço atípico.
+O projeto editável está em `dashboard/BPS_2020_2026.pbip`, no formato **PBIP**
+(Power BI Project): o modelo em TMSL (`model.bim`) e o relatório em PBIR, ambos
+JSON legíveis e versionáveis — é por isso que o `git diff` deste repositório
+mostra mudanças de dashboard linha a linha, e não um binário opaco.
+
+São **55 visuais** em três páginas de 1660×900, sobre tema escuro próprio
+(`StaticResources/RegisteredResources/BPS_Escuro.json`). As três páginas
+compartilham o mesmo trilho de navegação à esquerda, com botões nativos, de
+modo que o relatório se opera como um painel único com abas.
+
+Além de cartões e barras, o dashboard usa tipos de visual escolhidos pela
+interação que oferecem:
+
+| Visual | Página | Para quê |
+|---|---|---|
+| Árvore de decomposição | Geografia | Abre região → UF → instituição no clique, sem sair da página |
+| Gráfico de fita (ribbon) | Visão Geral | Mostra a troca de posição entre modalidades ao longo dos anos |
+| Cascata | Investigação | Decompõe os R$ 34 bi sinalizados, ano a ano, até o total |
+| Dispersão com bolha | Investigação | Quantidade × preço unitário, tamanho = valor |
+| Treemap | Visão Geral | Top 12 produtos por valor, com a Penicilamina dominando a área |
+| Rosca | Visão Geral / Geografia | Composição por tipo de produto e por esfera |
+| Área | Visão Geral | Série do preço unitário médio ponderado |
+
+Segmentações sincronizadas de Ano, UF, Esfera, Modalidade, Tipo de produto e
+Flag de preço atípico.
 
 ## 11. Principais análises e descobertas
 
@@ -282,10 +304,30 @@ python -m src.consolidar      # gera data/processed/BPS_20_26_LeoGobel.csv e .zi
 python -m pytest -q           # 32 testes
 ```
 
-Para abrir o dashboard: `dashboard/BPS_2020_2026.pbix` no **Power BI Desktop**.
-Se a fonte estiver quebrada, apontar para
-`data/processed/BPS_20_26_LeoGobel.csv` com codificação **UTF-8** e delimitador
-**ponto e vírgula**.
+Para regenerar o projeto do Power BI a partir dos scripts (opcional — ele já
+está versionado pronto):
+
+```bash
+python src/gerar_pbip.py dashboard "<caminho absoluto do BPS_20_26_LeoGobel.csv>"
+python src/gerar_dashboard.py     # aplica layout, tema escuro e os 55 visuais
+python src/validar_pbip.py dashboard .cache-schemas   # confere contra os schemas oficiais
+```
+
+### Abrir o dashboard
+
+1. No Power BI Desktop, habilitar **Arquivo > Opções e configurações > Opções >
+   Recursos de visualização > "Armazenar relatórios usando o formato de
+   metadados avançado (PBIR)"** e reiniciar. Sem isso o Desktop ignora a pasta
+   `definition/` e abre o relatório em branco.
+2. Abrir `dashboard/BPS_2020_2026.pbip`.
+3. Na primeira abertura o Desktop pede para atualizar o modelo — é esperado,
+   porque o projeto é versionado sem cache de dados. Confirmar.
+
+O caminho do CSV está gravado na consulta Power Query. Se a fonte estiver
+quebrada depois de clonar em outra pasta, apontar para
+`data/processed/BPS_20_26_LeoGobel.csv` com codificação **UTF-8**, delimitador
+**ponto e vírgula** e cultura **en-US** (o arquivo usa ponto decimal e datas
+ISO; ler como pt-BR multiplicaria os valores por dez).
 
 ### Estrutura do repositório
 
@@ -297,12 +339,17 @@ Se a fonte estiver quebrada, apontar para
 │   ├── io_bps.py            leitura dos arquivos anuais
 │   ├── perfil_dados.py      perfil e mapeamento de discrepâncias
 │   ├── tratamento.py        limpeza, colunas derivadas e flag
-│   └── consolidar.py        orquestração e validações
+│   ├── consolidar.py        orquestração e validações
+│   ├── gerar_pbip.py        gera o projeto Power BI (modelo + relatório)
+│   ├── gerar_dashboard.py   layout, tema escuro e os 55 visuais
+│   └── validar_pbip.py      valida o projeto contra os schemas oficiais
 ├── tests/                   32 testes automatizados
 ├── dashboard/
-│   ├── BPS_2020_2026.pbix   dashboard de três páginas
-│   ├── medidas_dax.md       definição de todas as medidas
-│   └── img/                 capturas das páginas
+│   ├── BPS_2020_2026.pbip           projeto Power BI
+│   ├── BPS_2020_2026.SemanticModel/ modelo em TMSL (model.bim)
+│   ├── BPS_2020_2026.Report/        relatório em PBIR + tema escuro
+│   ├── medidas_dax.md               definição de todas as medidas
+│   └── img/                         capturas das três páginas
 └── docs/
     └── perfil_discrepancias.md
 ```
