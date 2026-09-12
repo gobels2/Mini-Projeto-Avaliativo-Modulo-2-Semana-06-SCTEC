@@ -3,10 +3,10 @@
   "name": "marca",
   "position": {
     "x": 14,
-    "y": 28,
+    "y": 26,
     "z": 10,
     "width": 140,
-    "height": 40
+    "height": 44
   },
   "visual": {
     "visualType": "textbox",
@@ -20,7 +20,7 @@
                   {
                     "value": "BPS 2020–2026",
                     "textStyle": {
-                      "fontSize": "13pt",
+                      "fontSize": "15pt",
                       "color": "#E9EDF6",
                       "fontWeight": "bold"
                     }

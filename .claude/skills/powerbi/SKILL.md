@@ -129,6 +129,37 @@ Gradient (conditional formatting by measure):
     "max": {"color": {"Literal": {"Value": "'#104281'"}}}}}}}}}}
 ```
 
+### Names the schema will not check for you
+
+`visualType`, data-role names and formatting-property names are all free
+strings. Wrong ones pass validation and render as a blank card or an ignored
+style. These were verified against real reports — get the rest the same way,
+by grepping `FabricTools/pbir-samples`, never by guessing:
+
+| Coisa | Errado | Certo |
+|---|---|---|
+| Retângulo/forma | `shape` + `shape.tileShape` | **`basicShape`** + `general.shapeType` |
+| Árvore de decomposição (papéis) | `Analysis` / `Group` | **`Analyze`** / **`ExplainBy`** |
+| Cor de linha de tabela | `values.backColor` | **`values.backColorPrimary`** (+ `…Secondary` para a faixa alternada) |
+| Treemap (papéis) | `Category` / `Y` | **`Group`** / **`Values`** |
+
+**Botões e formas usam blocos com seletor de estado.** `show` fica num bloco
+sem seletor; o conteúdo vai noutro, com `selector: {"id": "default"}`. Tudo
+junto num bloco só é aceito e ignorado — o botão sai como um retângulo branco
+sem texto:
+
+```json
+"text": [
+  {"properties": {"show": {"expr": {"Literal": {"Value": "true"}}}}},
+  {"properties": {"text": {"expr": {"Literal": {"Value": "'Visão Geral'"}}}},
+   "selector": {"id": "default"}}
+]
+```
+
+**`labelPrecision` num cartão sobrepõe o `formatString` da medida.** Defini-lo
+como `0` transforma `R$ 1,3751` em `R$ 1`. Omita-o e deixe o formato da medida
+mandar.
+
 ### Top N filter
 
 No `Top` option exists on the visual query. Top N is a `filterConfig` entry of

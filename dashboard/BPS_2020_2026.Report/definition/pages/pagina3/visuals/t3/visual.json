@@ -5,7 +5,7 @@
     "x": 184,
     "y": 24,
     "z": 10,
-    "width": 600,
+    "width": 700,
     "height": 46
   },
   "visual": {
@@ -20,7 +20,7 @@
                   {
                     "value": "Investigação de Preços",
                     "textStyle": {
-                      "fontSize": "18pt",
+                      "fontSize": "24pt",
                       "color": "#E9EDF6",
                       "fontWeight": "bold"
                     }
