@@ -1,0 +1,149 @@
+{
+  "name": "BPS_Escuro",
+  "dataColors": [
+    "#3E9BFF",
+    "#00D6A4",
+    "#FFC24B",
+    "#FF5C5C",
+    "#9B7BFF",
+    "#38C6E0",
+    "#FF9F45",
+    "#7CD992"
+  ],
+  "background": "#0F1420",
+  "foreground": "#E9EDF6",
+  "tableAccent": "#3E9BFF",
+  "textClasses": {
+    "label": {
+      "fontSize": 12,
+      "color": "#E9EDF6"
+    },
+    "callout": {
+      "fontSize": 30,
+      "color": "#3E9BFF"
+    },
+    "title": {
+      "fontSize": 13,
+      "color": "#E9EDF6"
+    },
+    "header": {
+      "fontSize": 13,
+      "color": "#E9EDF6"
+    },
+    "largeTitle": {
+      "fontSize": 16,
+      "color": "#E9EDF6"
+    }
+  },
+  "visualStyles": {
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#0F1420"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#0F1420"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "*": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#1A2233"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "border": [
+          {
+            "color": {
+              "solid": {
+                "color": "#2A3550"
+              }
+            },
+            "radius": 10
+          }
+        ],
+        "title": [
+          {
+            "fontColor": {
+              "solid": {
+                "color": "#E9EDF6"
+              }
+            },
+            "fontSize": 13,
+            "background": {
+              "solid": {
+                "color": "#1A2233"
+              }
+            }
+          }
+        ],
+        "labels": [
+          {
+            "color": {
+              "solid": {
+                "color": "#E9EDF6"
+              }
+            },
+            "fontSize": 11
+          }
+        ],
+        "categoryAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#8E9AB5"
+              }
+            },
+            "fontSize": 11,
+            "showAxisTitle": false
+          }
+        ],
+        "valueAxis": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#8E9AB5"
+              }
+            },
+            "fontSize": 11,
+            "showAxisTitle": false,
+            "gridlineColor": {
+              "solid": {
+                "color": "#2A3550"
+              }
+            }
+          }
+        ],
+        "legend": [
+          {
+            "labelColor": {
+              "solid": {
+                "color": "#8E9AB5"
+              }
+            },
+            "fontSize": 11
+          }
+        ]
+      }
+    }
+  }
+}
