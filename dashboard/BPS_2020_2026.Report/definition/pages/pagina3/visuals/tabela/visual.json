@@ -3,10 +3,10 @@
   "name": "tabela",
   "position": {
     "x": 242,
-    "y": 524,
+    "y": 556,
     "z": 0,
     "width": 1396,
-    "height": 292
+    "height": 280
   },
   "visual": {
     "visualType": "tableEx",

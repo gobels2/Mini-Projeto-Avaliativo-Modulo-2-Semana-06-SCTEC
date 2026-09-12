@@ -6,7 +6,7 @@
     "y": 182,
     "z": 0,
     "width": 342,
-    "height": 330
+    "height": 372
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -101,6 +101,13 @@
                       "Value": "'#8E9AB5'"
                     }
                   }
+                }
+              }
+            },
+            "maxMarginFactor": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
                 }
               }
             }
@@ -205,6 +212,13 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showTitle": {
               "expr": {
                 "Literal": {
                   "Value": "false"

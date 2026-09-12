@@ -6,7 +6,7 @@
     "y": 182,
     "z": 0,
     "width": 700,
-    "height": 330
+    "height": 360
   },
   "visual": {
     "visualType": "waterfallChart",
@@ -83,6 +83,13 @@
                       "Value": "'#8E9AB5'"
                     }
                   }
+                }
+              }
+            },
+            "maxMarginFactor": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
                 }
               }
             }
@@ -187,6 +194,13 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showTitle": {
               "expr": {
                 "Literal": {
                   "Value": "false"

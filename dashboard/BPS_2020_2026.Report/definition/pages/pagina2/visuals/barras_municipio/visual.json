@@ -3,10 +3,10 @@
   "name": "barras_municipio",
   "position": {
     "x": 242,
-    "y": 524,
+    "y": 566,
     "z": 0,
     "width": 460,
-    "height": 292
+    "height": 268
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -101,6 +101,13 @@
                       "Value": "'#8E9AB5'"
                     }
                   }
+                }
+              }
+            },
+            "maxMarginFactor": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
                 }
               }
             }
@@ -205,6 +212,13 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showTitle": {
               "expr": {
                 "Literal": {
                   "Value": "false"

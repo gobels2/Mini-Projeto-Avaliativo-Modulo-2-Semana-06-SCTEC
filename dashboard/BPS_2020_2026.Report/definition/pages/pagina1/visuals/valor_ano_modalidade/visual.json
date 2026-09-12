@@ -103,6 +103,13 @@
                   }
                 }
               }
+            },
+            "maxMarginFactor": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
+                }
+              }
             }
           }
         }
@@ -233,6 +240,13 @@
                       "Value": "'#8E9AB5'"
                     }
                   }
+                }
+              }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
