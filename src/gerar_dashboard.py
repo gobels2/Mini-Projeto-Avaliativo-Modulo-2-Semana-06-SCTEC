@@ -29,7 +29,10 @@ S_PAGES = "https://developer.microsoft.com/json-schemas/fabric/item/report/defin
 S_PAGE = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json"
 S_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json"
 
-L, A = 1600, 900          # canvas widescreen
+# O trilho passou de 168 para 226px; o conteudo mantem a mesma largura, entao
+# a tela precisa crescer os mesmos 58px, senao o ultimo cartao de cada linha
+# fica cortado na borda direita.
+L, A = 1660, 900          # canvas widescreen
 RAIL_W = 226              # trilho de navegação — largo o bastante para o título
                           # não sair cortado em "BPS 2020–"
 
@@ -126,12 +129,15 @@ def moldura(titulo: str | None, cor_titulo: str = TINTA) -> dict:
 def eixos(rotulos=False, rot_cor=TINTA2) -> dict:
     return {
         "categoryAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(11),
-                          labelColor=cor(TINTA2)),
+                          labelColor=cor(TINTA2),
+                          # Sem isto o Power BI reserva so 25% da largura para
+                          # os rotulos e quatro barras viram "SECRETARIA ...".
+                          maxMarginFactor=num(45)),
         "valueAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(11),
                        labelColor=cor(TINTA2), gridlineShow=bol(True),
                        gridlineColor=cor(BORDA), gridlineThickness=num(1)),
         "labels": o(show=bol(rotulos), fontSize=num(11), color=cor(rot_cor)),
-        "legend": o(show=bol(False)),
+        "legend": o(show=bol(False), showTitle=bol(False)),
     }
 
 
@@ -308,7 +314,8 @@ def pagina1() -> list:
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por ano e modalidade de compra",
                {**eixos(), "legend": o(show=bol(True), position=txt("Bottom"),
-                                       fontSize=num(11), labelColor=cor(TINTA2))}),
+                                       fontSize=num(11), labelColor=cor(TINTA2),
+                                       showTitle=bol(False))}),
         visual("preco_ano", "areaChart", x0 + 712, 182, 684, 300,
                {"Category": [proj(col(CAL, "Ano"), f"{CAL}.Ano")],
                 "Y": [proj(med("Preço Unit. Médio Ponderado"), f"{TABELA}.Preço Unit. Médio Ponderado")]},
@@ -328,8 +335,8 @@ def pagina1() -> list:
                {"Category": [proj(col(TABELA, "tipo_produto"), f"{TABELA}.tipo_produto")],
                 "Y": [proj(med("Nº de Registros"), f"{TABELA}.Nº de Registros")]},
                "Registros por tipo de produto",
-               {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(9),
-                            labelColor=cor(TINTA2)),
+               {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(11),
+                            labelColor=cor(TINTA2), showTitle=bol(False)),
                 "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "slices": o(innerRadiusRatio=num(60))}),
         visual("barras_tipocompra", "clusteredBarChart", x0 + 1060, 494, 336, 322,
@@ -347,7 +354,7 @@ def pagina2() -> list:
     vs = trilho(1) + faixa_kpis("p2")
     vs.append(rotulo_texto("t2", "Geografia e Instituições", x0, 24, 700, 46, 24))
     vs += [
-        visual("arvore", "decompositionTreeVisual", x0, 182, 700, 330,
+        visual("arvore", "decompositionTreeVisual", x0, 182, 700, 372,
                # Os papéis da árvore são "Analyze" e "ExplainBy" — com
                # "Analysis"/"Group" o visual carrega mas exibe
                # "No field to analyze".
@@ -357,34 +364,34 @@ def pagina2() -> list:
                               proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")]},
                "Clique para abrir região, UF e instituição",
                {}),
-        visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 330,
+        visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 372,
                {"Category": [proj(col(TABELA, "uf"), f"{TABELA}.uf")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por UF — 24 de 27, sem AM, AP e DF",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado"),
-        visual("donut_esfera", "donutChart", x0 + 1066, 182, 330, 330,
+        visual("donut_esfera", "donutChart", x0 + 1066, 182, 330, 372,
                {"Category": [proj(col(TABELA, "esfera"), f"{TABELA}.esfera")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por esfera de governo",
-               {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(9),
-                            labelColor=cor(TINTA2)),
+               {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(11),
+                            labelColor=cor(TINTA2), showTitle=bol(False)),
                 "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "slices": o(innerRadiusRatio=num(60))}),
-        visual("barras_municipio", "clusteredBarChart", x0, 524, 460, 292,
+        visual("barras_municipio", "clusteredBarChart", x0, 566, 460, 268,
                {"Category": [proj(col(TABELA, "municipio_instituicao"), f"{TABELA}.municipio_instituicao")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 municípios",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado", topn=10,
                cat=(TABELA, "municipio_instituicao")),
-        visual("barras_instituicao", "clusteredBarChart", x0 + 472, 524, 460, 292,
+        visual("barras_instituicao", "clusteredBarChart", x0 + 472, 566, 460, 268,
                {"Category": [proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 instituições compradoras",
                {**eixos(), "dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL))},
                sort_med="Valor Total Registrado", topn=10, cat=(TABELA, "instituicao")),
-        visual("barras_fornecedor", "clusteredBarChart", x0 + 944, 524, 452, 292,
+        visual("barras_fornecedor", "clusteredBarChart", x0 + 944, 566, 452, 268,
                {"Category": [proj(col(TABELA, "fornecedor"), f"{TABELA}.fornecedor")],
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 10 fornecedores",
@@ -404,14 +411,14 @@ def pagina3() -> list:
                "Filtrar registros atípicos",
                {"items": o(fontColor=cor(TINTA), fontSize=num(12)),
                 "header": o(show=bol(False))}),
-        visual("cascata", "waterfallChart", x0 + 262, 182, 700, 330,
+        visual("cascata", "waterfallChart", x0 + 262, 182, 700, 360,
                {"Category": [proj(col(CAL, "Ano"), f"{CAL}.Ano")],
                 "Y": [proj(med("Valor Registros Atípicos"), f"{TABELA}.Valor Registros Atípicos")]},
                "Contribuição do valor sinalizado, ano a ano",
                {**eixos(True, VERMELHO),
                 "sentimentColors": o(increaseFill=cor(VERMELHO), decreaseFill=cor(TEAL),
                                      totalFill=cor(AZUL))}),
-        visual("dispersao", "scatterChart", x0 + 974, 182, 422, 330,
+        visual("dispersao", "scatterChart", x0 + 974, 182, 422, 360,
                {"Category": [proj(col(TABELA, "principio_ativo"), f"{TABELA}.principio_ativo")],
                 "X": [proj(med("Qtd Total de Itens"), f"{TABELA}.Qtd Total de Itens")],
                 "Y": [proj(med("Preço Unit. Médio Ponderado"), f"{TABELA}.Preço Unit. Médio Ponderado")],
@@ -421,14 +428,14 @@ def pagina3() -> list:
                 "fillPoint": o(show=bol(True))},
                sort_med="Valor Total Registrado", topn=40,
                cat=(TABELA, "principio_ativo")),
-        visual("barras_atipico_produto", "clusteredBarChart", x0, 344, 250, 168,
+        visual("barras_atipico_produto", "clusteredBarChart", x0, 344, 250, 198,
                {"Category": [proj(col(TABELA, "uf"), f"{TABELA}.uf")],
                 "Y": [proj(med("Valor Registros Atípicos"), f"{TABELA}.Valor Registros Atípicos")]},
                "UF por valor sinalizado",
                {**eixos(), "dataPoint": o(fill=grad("Valor Registros Atípicos",
                                                     VERMELHO_ESC, VERMELHO))},
                sort_med="Valor Registros Atípicos"),
-        visual("tabela", "tableEx", x0, 524, 1396, 292,
+        visual("tabela", "tableEx", x0, 556, 1396, 280,
                {"Values": [
                    proj(col(TABELA, "ano_compra"), f"{TABELA}.ano_compra"),
                    proj(col(TABELA, "uf"), f"{TABELA}.uf"),
@@ -573,7 +580,27 @@ def main() -> None:
             escrever(base / "visuals" / v["name"] / "visual.json", v)
             total += 1
 
+    conferir_geometria()
     print(f"canvas {L}x{A} escuro, {len(PAGINAS)} páginas, {total} visuais")
+
+
+def conferir_geometria() -> None:
+    """Falha se algum visual passar da borda da tela.
+
+    Alargar o trilho sem encolher o conteúdo empurrou tudo para fora da tela
+    e cortou o último cartão de cada linha nas três páginas. O erro só
+    apareceu nas capturas; esta checagem o pega antes.
+    """
+    estouros = []
+    for f in (DEF / "pages").rglob("visual.json"):
+        p = json.loads(f.read_text(encoding="utf-8"))["position"]
+        if p["x"] + p["width"] > L or p["y"] + p["height"] > A:
+            estouros.append(
+                f'{f.parent.name}: termina em '
+                f'({p["x"] + p["width"]}, {p["y"] + p["height"]}) '
+                f'numa tela de {L}x{A}')
+    if estouros:
+        raise SystemExit("Visuais fora da tela:\n  - " + "\n  - ".join(estouros))
 
 
 if __name__ == "__main__":

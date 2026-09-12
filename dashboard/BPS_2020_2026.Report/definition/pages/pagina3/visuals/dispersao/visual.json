@@ -6,7 +6,7 @@
     "y": 182,
     "z": 0,
     "width": 422,
-    "height": 330
+    "height": 360
   },
   "visual": {
     "visualType": "scatterChart",
@@ -139,6 +139,13 @@
                   }
                 }
               }
+            },
+            "maxMarginFactor": {
+              "expr": {
+                "Literal": {
+                  "Value": "45D"
+                }
+              }
             }
           }
         }
@@ -241,6 +248,13 @@
         {
           "properties": {
             "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "showTitle": {
               "expr": {
                 "Literal": {
                   "Value": "false"
