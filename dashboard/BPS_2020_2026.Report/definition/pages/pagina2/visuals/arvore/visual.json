@@ -12,7 +12,7 @@
     "visualType": "decompositionTreeVisual",
     "query": {
       "queryState": {
-        "Analysis": {
+        "Analyze": {
           "projections": [
             {
               "field": {
@@ -30,7 +30,7 @@
             }
           ]
         },
-        "Group": {
+        "ExplainBy": {
           "projections": [
             {
               "field": {
@@ -209,7 +209,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "11D"
+                  "Value": "13D"
                 }
               }
             },

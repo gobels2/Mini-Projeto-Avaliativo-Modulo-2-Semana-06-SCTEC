@@ -9,12 +9,12 @@
     "height": 900
   },
   "visual": {
-    "visualType": "shape",
+    "visualType": "basicShape",
     "objects": {
-      "shape": [
+      "general": [
         {
           "properties": {
-            "tileShape": {
+            "shapeType": {
               "expr": {
                 "Literal": {
                   "Value": "'rectangle'"
@@ -55,13 +55,13 @@
           }
         }
       ],
-      "outline": [
+      "line": [
         {
           "properties": {
-            "show": {
+            "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "100D"
                 }
               }
             }

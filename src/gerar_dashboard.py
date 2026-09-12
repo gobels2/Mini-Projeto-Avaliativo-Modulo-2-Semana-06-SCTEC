@@ -81,6 +81,20 @@ def o(**p) -> list:
     return [{"properties": p}]
 
 
+def o_estado(mostrar: bool, **p) -> list:
+    """Objeto com estado nomeado.
+
+    Botões e formas separam o `show` (bloco sem seletor) do conteúdo, que vai
+    num bloco com `selector: {"id": "default"}`. Sem o seletor o Power BI
+    aceita o JSON e ignora a formatação — foi por isso que os botões saíram
+    como retângulos brancos sem texto.
+    """
+    return [
+        {"properties": {"show": bol(mostrar)}},
+        {"properties": p, "selector": {"id": "default"}},
+    ]
+
+
 def med(nome: str) -> dict:
     return {"Measure": {"Expression": {"SourceRef": {"Entity": TABELA}}, "Property": nome}}
 
@@ -101,7 +115,7 @@ def moldura(titulo: str | None, cor_titulo: str = TINTA) -> dict:
         "padding": o(top=num(6), bottom=num(6), left=num(8), right=num(8)),
     }
     if titulo:
-        m["title"] = o(show=bol(True), text=txt(titulo), fontSize=num(11),
+        m["title"] = o(show=bol(True), text=txt(titulo), fontSize=num(13),
                        bold=bol(True), fontColor=cor(cor_titulo),
                        background=cor(CARTAO), alignment=txt("left"),
                        titleWrap=bol(True))
@@ -110,12 +124,12 @@ def moldura(titulo: str | None, cor_titulo: str = TINTA) -> dict:
 
 def eixos(rotulos=False, rot_cor=TINTA2) -> dict:
     return {
-        "categoryAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(9),
+        "categoryAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(11),
                           labelColor=cor(TINTA2)),
-        "valueAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(9),
+        "valueAxis": o(show=bol(True), showAxisTitle=bol(False), fontSize=num(11),
                        labelColor=cor(TINTA2), gridlineShow=bol(True),
                        gridlineColor=cor(BORDA), gridlineThickness=num(1)),
-        "labels": o(show=bol(rotulos), fontSize=num(9), color=cor(rot_cor)),
+        "labels": o(show=bol(rotulos), fontSize=num(11), color=cor(rot_cor)),
         "legend": o(show=bol(False)),
     }
 
@@ -174,7 +188,9 @@ def cartao(nome, medida, x, y, w, h, acento=AZUL) -> dict:
         titulo=medida,
         cor_titulo=TINTA2,
         objs={
-            "labels": o(fontSize=num(22), color=cor(acento), labelPrecision=num(0)),
+            # Sem labelPrecision: ele sobrepõe o formatString da medida e
+            # transformava R$ 1,3751 em "R$ 1".
+            "labels": o(fontSize=num(30), color=cor(acento)),
             "categoryLabels": o(show=bol(False)),
             "wordWrap": o(show=bol(False)),
         },
@@ -191,13 +207,15 @@ def botao(nome, rotulo, destino, indice, ativo: bool) -> dict:
         "visual": {
             "visualType": "actionButton",
             "objects": {
-                "text": o(show=bol(True), text=txt(rotulo),
-                          fontColor=cor(TINTA if ativo else TINTA2),
-                          fontSize=num(11), bold=bol(ativo),
-                          horizontalAlignment=txt("left"), leftMargin=num(12)),
-                "fill": o(show=bol(True),
-                          fillColor=cor(AZUL_ESC if ativo else RAIL_BG),
-                          transparency=num(0)),
+                "text": o_estado(True, text=txt(rotulo),
+                                 fontColor=cor(TINTA if ativo else TINTA2),
+                                 fontSize=num(13), bold=bol(ativo),
+                                 horizontalAlignment=txt("left"),
+                                 leftMargin=num(14)),
+                "fill": o_estado(True,
+                                 fillColor=cor(AZUL if ativo else CARTAO),
+                                 transparency=num(0)),
+                "icon": o_estado(False, shapeType=txt("blank")),
                 "outline": o(show=bol(False)),
             },
             "visualContainerObjects": {
@@ -244,11 +262,15 @@ def painel_trilho() -> dict:
         "name": "rail_bg",
         "position": {"x": 0, "y": 0, "z": 0, "width": RAIL_W, "height": A},
         "visual": {
-            "visualType": "shape",
+            # basicShape, com shapeType em "general" — o tipo "shape" com
+            # "tileShape" é aceito pelo schema mas ignorado na renderização, e
+            # o retângulo sai com o azul padrão do tema.
+            "visualType": "basicShape",
             "objects": {
-                "shape": o(tileShape=txt("rectangle")),
-                "fill": o(show=bol(True), fillColor=cor(RAIL_BG), transparency=num(0)),
-                "outline": o(show=bol(False)),
+                "general": o(shapeType=txt("rectangle")),
+                "fill": o(show=bol(True), fillColor=cor(RAIL_BG),
+                          transparency=num(0)),
+                "line": o(transparency=num(100)),
             },
             "visualContainerObjects": {
                 "background": o(show=bol(False)),
@@ -260,8 +282,8 @@ def painel_trilho() -> dict:
 
 def trilho(indice_ativo: int) -> list:
     vs = [painel_trilho(),
-          rotulo_texto("marca", "BPS 2020–2026", 14, 28, RAIL_W - 28, 40, 13),
-          rotulo_texto("marca2", "Banco de Preços em Saúde", 14, 68, RAIL_W - 28, 48, 8,
+          rotulo_texto("marca", "BPS 2020–2026", 14, 26, RAIL_W - 28, 44, 15),
+          rotulo_texto("marca2", "Banco de Preços em Saúde", 14, 68, RAIL_W - 28, 48, 10,
                        TINTA2, False)]
     for i, (pid, rot) in enumerate(PAGINAS):
         vs.append(botao(f"nav_{pid}", rot, pid, i, i == indice_ativo))
@@ -277,7 +299,7 @@ def faixa_kpis(prefixo: str) -> list:
 def pagina1() -> list:
     x0 = RAIL_W + 16
     vs = trilho(0) + faixa_kpis("p1")
-    vs.append(rotulo_texto("t1", "Visão Geral", x0, 24, 600, 46, 18))
+    vs.append(rotulo_texto("t1", "Visão Geral", x0, 24, 700, 46, 24))
     vs += [
         visual("valor_ano_modalidade", "ribbonChart", x0, 182, 700, 300,
                {"Category": [proj(col(CAL, "Ano"), f"{CAL}.Ano")],
@@ -285,7 +307,7 @@ def pagina1() -> list:
                 "Y": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Valor por ano e modalidade de compra",
                {**eixos(), "legend": o(show=bol(True), position=txt("Bottom"),
-                                       fontSize=num(9), labelColor=cor(TINTA2))}),
+                                       fontSize=num(11), labelColor=cor(TINTA2))}),
         visual("preco_ano", "areaChart", x0 + 712, 182, 684, 300,
                {"Category": [proj(col(CAL, "Ano"), f"{CAL}.Ano")],
                 "Y": [proj(med("Preço Unit. Médio Ponderado"), f"{TABELA}.Preço Unit. Médio Ponderado")]},
@@ -297,7 +319,7 @@ def pagina1() -> list:
                 "Values": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Top 12 princípios ativos e produtos por valor",
                {"dataPoint": o(fill=grad("Valor Total Registrado", AZUL_ESC, AZUL)),
-                "labels": o(show=bol(True), fontSize=num(9), color=cor(TINTA)),
+                "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "legend": o(show=bol(False))},
                sort_med="Valor Total Registrado", topn=12,
                cat=(TABELA, "principio_ativo")),
@@ -307,7 +329,7 @@ def pagina1() -> list:
                "Registros por tipo de produto",
                {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(9),
                             labelColor=cor(TINTA2)),
-                "labels": o(show=bol(True), fontSize=num(9), color=cor(TINTA)),
+                "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "slices": o(innerRadiusRatio=num(60))}),
         visual("barras_tipocompra", "clusteredBarChart", x0 + 1060, 494, 336, 322,
                {"Category": [proj(col(TABELA, "tipo_compra"), f"{TABELA}.tipo_compra")],
@@ -322,13 +344,16 @@ def pagina1() -> list:
 def pagina2() -> list:
     x0 = RAIL_W + 16
     vs = trilho(1) + faixa_kpis("p2")
-    vs.append(rotulo_texto("t2", "Geografia e Instituições", x0, 24, 600, 46, 18))
+    vs.append(rotulo_texto("t2", "Geografia e Instituições", x0, 24, 700, 46, 24))
     vs += [
         visual("arvore", "decompositionTreeVisual", x0, 182, 700, 330,
-               {"Analysis": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")],
-                "Group": [proj(col(TABELA, "regiao"), f"{TABELA}.regiao"),
-                          proj(col(TABELA, "uf"), f"{TABELA}.uf"),
-                          proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")]},
+               # Os papéis da árvore são "Analyze" e "ExplainBy" — com
+               # "Analysis"/"Group" o visual carrega mas exibe
+               # "No field to analyze".
+               {"Analyze": [proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")],
+                "ExplainBy": [proj(col(TABELA, "regiao"), f"{TABELA}.regiao"),
+                              proj(col(TABELA, "uf"), f"{TABELA}.uf"),
+                              proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")]},
                "Árvore de decomposição — clique para abrir região, UF e instituição",
                {}),
         visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 330,
@@ -343,7 +368,7 @@ def pagina2() -> list:
                "Valor por esfera de governo",
                {"legend": o(show=bol(True), position=txt("Bottom"), fontSize=num(9),
                             labelColor=cor(TINTA2)),
-                "labels": o(show=bol(True), fontSize=num(9), color=cor(TINTA)),
+                "labels": o(show=bol(True), fontSize=num(11), color=cor(TINTA)),
                 "slices": o(innerRadiusRatio=num(60))}),
         visual("barras_municipio", "clusteredBarChart", x0, 524, 460, 292,
                {"Category": [proj(col(TABELA, "municipio_instituicao"), f"{TABELA}.municipio_instituicao")],
@@ -371,12 +396,12 @@ def pagina2() -> list:
 def pagina3() -> list:
     x0 = RAIL_W + 16
     vs = trilho(2) + faixa_kpis("p3")
-    vs.append(rotulo_texto("t3", "Investigação de Preços", x0, 24, 600, 46, 18))
+    vs.append(rotulo_texto("t3", "Investigação de Preços", x0, 24, 700, 46, 24))
     vs += [
         visual("slicer_flag", "slicer", x0, 182, 250, 150,
                {"Values": [proj(col(TABELA, "flag_preco_atipico"), f"{TABELA}.flag_preco_atipico")]},
                "Filtrar registros atípicos",
-               {"items": o(fontColor=cor(TINTA), fontSize=num(10)),
+               {"items": o(fontColor=cor(TINTA), fontSize=num(12)),
                 "header": o(show=bol(False))}),
         visual("cascata", "waterfallChart", x0 + 262, 182, 700, 330,
                {"Category": [proj(col(CAL, "Ano"), f"{CAL}.Ano")],
@@ -415,12 +440,16 @@ def pagina3() -> list:
                    proj(col(TABELA, "razao_vs_mediana"), f"{TABELA}.razao_vs_mediana"),
                    proj(med("Valor Total Registrado"), f"{TABELA}.Valor Total Registrado")]},
                "Registros a verificar — maiores valores da base",
+               # A tabela usa fontColorPrimary/backColorPrimary (e o par
+               # Secondary das linhas alternadas). Com fontColor/backColor o
+               # JSON passa mas as linhas ficam brancas sobre o tema escuro.
                {"grid": o(gridVertical=bol(False), gridHorizontalColor=cor(BORDA),
-                          rowPadding=num(3)),
-                "columnHeaders": o(fontSize=num(9), bold=bol(True), fontColor=cor(TINTA),
-                                   backColor=cor(CARTAO)),
-                "values": o(fontSize=num(9), fontColor=cor(TINTA2),
-                            backColor=cor(CARTAO), backColorSecondary=cor(CARTAO))},
+                          rowPadding=num(4)),
+                "columnHeaders": o(fontSize=num(11), bold=bol(True),
+                                   fontColor=cor(TINTA), backColor=cor(RAIL_BG)),
+                "values": o(fontSize=num(11),
+                            fontColorPrimary=cor(TINTA), backColorPrimary=cor(CARTAO),
+                            fontColorSecondary=cor(TINTA), backColorSecondary=cor(RAIL_BG))},
                sort_med="Valor Total Registrado"),
     ]
     return vs
