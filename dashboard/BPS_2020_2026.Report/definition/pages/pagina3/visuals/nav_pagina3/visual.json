@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
   "name": "nav_pagina3",
   "position": {
-    "x": 14,
-    "y": 260,
+    "x": 16,
+    "y": 278,
     "z": 10,
-    "width": 140,
-    "height": 44
+    "width": 194,
+    "height": 48
   },
   "visual": {
     "visualType": "actionButton",
@@ -46,7 +46,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "13D"
+                  "Value": "15D"
                 }
               }
             },
@@ -67,7 +67,7 @@
             "leftMargin": {
               "expr": {
                 "Literal": {
-                  "Value": "14D"
+                  "Value": "16D"
                 }
               }
             }

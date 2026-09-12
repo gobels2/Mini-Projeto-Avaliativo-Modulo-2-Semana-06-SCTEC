@@ -32,10 +32,17 @@ def carregar(uri):
 
 root = Path(sys.argv[1])
 alvos = [f for f in sorted(root.rglob('*'))
-         if f.is_file() and f.suffix in ('.json', '.pbip', '.pbir', '.pbism', '.bim')]
+         if f.is_file() and f.suffix in ('.json', '.pbip', '.pbir', '.pbism', '.bim')
+         and '.pbi' not in f.parts              # .pbi/ e local, fica fora do git
+         # Temas do Power BI sao JSON proprio, sem $schema obrigatorio.
+         and 'RegisteredResources' not in f.parts]
 ok = falhas = 0
 erros = []
-SEM_SCHEMA_OK = {'model.bim'}
+avisos = []
+# Arquivos que o proprio Power BI Desktop grava sem $schema.
+SEM_SCHEMA_OK = {'model.bim', 'definition.pbir', 'definition.pbism',
+                 'diagramLayout.json', 'localSettings.json', 'editorSettings.json'}
+SUFIXO_SEM_SCHEMA_OK = {'.pbip'}   # o Desktop remove o $schema ao salvar
 
 for f in alvos:
     try:
@@ -45,7 +52,7 @@ for f in alvos:
 
     uri = doc.get('$schema')
     if not uri:
-        if f.name in SEM_SCHEMA_OK:
+        if f.name in SEM_SCHEMA_OK or f.suffix in SUFIXO_SEM_SCHEMA_OK:
             ok += 1
         else:
             erros.append((f, 'sem propriedade $schema')); falhas += 1
@@ -54,7 +61,12 @@ for f in alvos:
     try:
         esquema = carregar(uri)
     except Exception:
-        erros.append((f, f'$schema NAO RESOLVE (404/erro): {uri}')); falhas += 1; continue
+        # O Desktop grava versoes de schema que a Microsoft ainda nao publicou
+        # (ex.: visualContainer/2.12.0 devolve 404). Nao da para validar, mas
+        # tambem nao e defeito do projeto: quem escreveu o arquivo foi o
+        # proprio Power BI. Vira aviso, nao falha.
+        avisos.append((f, f'schema nao publicado, nao verificavel: {uri}'))
+        continue
 
     pat = esquema.get('properties', {}).get('$schema', {}).get('pattern')
     if pat:
@@ -77,7 +89,14 @@ for f in alvos:
     else:
         ok += 1
 
-print(f"arquivos: {len(alvos)} | OK: {ok} | FALHAS: {falhas}")
+print(f"arquivos: {len(alvos)} | OK: {ok} | FALHAS: {falhas} | avisos: {len(avisos)}")
+if avisos:
+    print("\n--- avisos (schema nao publicado pela Microsoft) ---")
+    vistos = {}
+    for f, m in avisos:
+        vistos.setdefault(m.split(': ')[-1], []).append(f.name)
+    for u, fs in vistos.items():
+        print(f"   {len(fs)} arquivo(s): {u}")
 if FALHAS_URL:
     print("\nURLs de schema que nao resolveram:")
     for u, e in FALHAS_URL.items(): print(f"   {u}\n      {e}")

@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
   "name": "donut_tipo",
   "position": {
-    "x": 896,
+    "x": 954,
     "y": 494,
     "z": 0,
     "width": 336,

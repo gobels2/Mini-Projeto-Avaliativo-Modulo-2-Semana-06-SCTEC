@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
   "name": "donut_esfera",
   "position": {
-    "x": 1250,
+    "x": 1308,
     "y": 182,
     "z": 0,
     "width": 330,

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
   "name": "marca",
   "position": {
-    "x": 14,
+    "x": 16,
     "y": 26,
     "z": 10,
-    "width": 140,
-    "height": 44
+    "width": 194,
+    "height": 46
   },
   "visual": {
     "visualType": "textbox",
@@ -20,7 +20,7 @@
                   {
                     "value": "BPS 2020–2026",
                     "textStyle": {
-                      "fontSize": "15pt",
+                      "fontSize": "19pt",
                       "color": "#E9EDF6",
                       "fontWeight": "bold"
                     }

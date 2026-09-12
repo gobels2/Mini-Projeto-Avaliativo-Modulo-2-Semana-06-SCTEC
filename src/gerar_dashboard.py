@@ -30,7 +30,8 @@ S_PAGE = "https://developer.microsoft.com/json-schemas/fabric/item/report/defini
 S_VISUAL = "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json"
 
 L, A = 1600, 900          # canvas widescreen
-RAIL_W = 168              # trilho de navegação
+RAIL_W = 226              # trilho de navegação — largo o bastante para o título
+                          # não sair cortado em "BPS 2020–"
 
 # ---- paleta escura -------------------------------------------------------
 FUNDO = "#0F1420"
@@ -199,19 +200,19 @@ def cartao(nome, medida, x, y, w, h, acento=AZUL) -> dict:
 
 def botao(nome, rotulo, destino, indice, ativo: bool) -> dict:
     """Botão do trilho: navegação nativa entre páginas."""
-    y = 148 + indice * 56
+    y = 158 + indice * 60
     return {
         "$schema": S_VISUAL,
         "name": nome,
-        "position": {"x": 14, "y": y, "z": 10, "width": RAIL_W - 28, "height": 44},
+        "position": {"x": 16, "y": y, "z": 10, "width": RAIL_W - 32, "height": 48},
         "visual": {
             "visualType": "actionButton",
             "objects": {
                 "text": o_estado(True, text=txt(rotulo),
                                  fontColor=cor(TINTA if ativo else TINTA2),
-                                 fontSize=num(13), bold=bol(ativo),
+                                 fontSize=num(15), bold=bol(ativo),
                                  horizontalAlignment=txt("left"),
-                                 leftMargin=num(14)),
+                                 leftMargin=num(16)),
                 "fill": o_estado(True,
                                  fillColor=cor(AZUL if ativo else CARTAO),
                                  transparency=num(0)),
@@ -282,8 +283,8 @@ def painel_trilho() -> dict:
 
 def trilho(indice_ativo: int) -> list:
     vs = [painel_trilho(),
-          rotulo_texto("marca", "BPS 2020–2026", 14, 26, RAIL_W - 28, 44, 15),
-          rotulo_texto("marca2", "Banco de Preços em Saúde", 14, 68, RAIL_W - 28, 48, 10,
+          rotulo_texto("marca", "BPS 2020–2026", 16, 26, RAIL_W - 32, 46, 19),
+          rotulo_texto("marca2", "Banco de Preços em Saúde", 14, 68, RAIL_W - 32, 52, 12,
                        TINTA2, False)]
     for i, (pid, rot) in enumerate(PAGINAS):
         vs.append(botao(f"nav_{pid}", rot, pid, i, i == indice_ativo))
@@ -354,7 +355,7 @@ def pagina2() -> list:
                 "ExplainBy": [proj(col(TABELA, "regiao"), f"{TABELA}.regiao"),
                               proj(col(TABELA, "uf"), f"{TABELA}.uf"),
                               proj(col(TABELA, "instituicao"), f"{TABELA}.instituicao")]},
-               "Árvore de decomposição — clique para abrir região, UF e instituição",
+               "Clique para abrir região, UF e instituição",
                {}),
         visual("barras_uf", "clusteredBarChart", x0 + 712, 182, 342, 330,
                {"Category": [proj(col(TABELA, "uf"), f"{TABELA}.uf")],
@@ -455,6 +456,66 @@ def pagina3() -> list:
     return vs
 
 
+NOME_TEMA = "BPS_Escuro"
+
+
+def tema() -> dict:
+    """Tema personalizado do relatório.
+
+    Existe por um motivo concreto: a árvore de decomposição não expõe objetos
+    de formatação de fonte, então o texto dos nós (os valores em cinza escuro)
+    só muda pelas classes de texto do tema. O `label` abaixo é o que deixa
+    aquele texto maior e claro.
+
+    O JSON de tema usa valores crus — nada de `{"expr": {"Literal": ...}}`,
+    que é a sintaxe do visual.json.
+    """
+    return {
+        "name": NOME_TEMA,
+        "dataColors": [AZUL, TEAL, AMARELO, VERMELHO, "#9B7BFF", "#38C6E0",
+                       "#FF9F45", "#7CD992"],
+        "background": FUNDO,
+        "foreground": TINTA,
+        "tableAccent": AZUL,
+        "textClasses": {
+            "label": {"fontSize": 12, "color": TINTA},
+            "callout": {"fontSize": 30, "color": AZUL},
+            "title": {"fontSize": 13, "color": TINTA},
+            "header": {"fontSize": 13, "color": TINTA},
+            "largeTitle": {"fontSize": 16, "color": TINTA},
+        },
+        "visualStyles": {
+            "page": {"*": {
+                "background": [{"color": {"solid": {"color": FUNDO}}, "transparency": 0}],
+                "outspace": [{"color": {"solid": {"color": FUNDO}}}],
+            }},
+            "*": {"*": {
+                "background": [{"color": {"solid": {"color": CARTAO}}, "transparency": 0}],
+                "border": [{"color": {"solid": {"color": BORDA}}, "radius": 10}],
+                "title": [{"fontColor": {"solid": {"color": TINTA}}, "fontSize": 13,
+                           "background": {"solid": {"color": CARTAO}}}],
+                "labels": [{"color": {"solid": {"color": TINTA}}, "fontSize": 11}],
+                "categoryAxis": [{"labelColor": {"solid": {"color": TINTA2}},
+                                  "fontSize": 11, "showAxisTitle": False}],
+                "valueAxis": [{"labelColor": {"solid": {"color": TINTA2}},
+                               "fontSize": 11, "showAxisTitle": False,
+                               "gridlineColor": {"solid": {"color": BORDA}}}],
+                "legend": [{"labelColor": {"solid": {"color": TINTA2}}, "fontSize": 11}],
+            }},
+        },
+    }
+
+
+# Os visuais com filtro Top N não conseguem realçar a árvore: o Power BI avisa
+# que "Top N cross highlighting isn't supported". Passar a interação para
+# DataFilter resolve — o clique continua filtrando a árvore, só não tenta
+# realçar.
+INTERACOES_P2 = [
+    {"source": s, "target": "arvore", "type": "DataFilter"}
+    for s in ("barras_municipio", "barras_instituicao", "barras_fornecedor")
+]
+
+
 def escrever(p: Path, obj: dict) -> None:
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -465,13 +526,30 @@ def main() -> None:
         shutil.rmtree(DEF)
 
     escrever(DEF / "version.json", {"$schema": S_VER, "version": "2.0.0"})
+    escrever(REPORT / "StaticResources" / "RegisteredResources" / f"{NOME_TEMA}.json",
+             tema())
     escrever(DEF / "report.json", {
         "$schema": S_REPORT,
-        "themeCollection": {"baseTheme": {
-            "name": "CY19SU12",
-            "reportVersionAtImport": {"visual": "1.8.46", "report": "2.0.46",
-                                      "page": "1.3.46"},
-            "type": "SharedResources"}},
+        "themeCollection": {
+            "baseTheme": {
+                "name": "CY19SU12",
+                "reportVersionAtImport": {"visual": "1.8.46", "report": "2.0.46",
+                                          "page": "1.3.46"},
+                "type": "SharedResources"},
+            "customTheme": {
+                "name": NOME_TEMA,
+                "reportVersionAtImport": {"visual": "1.8.46", "report": "2.0.46",
+                                          "page": "1.3.46"},
+                "type": "RegisteredResources"},
+        },
+        "resourcePackages": [
+            {"name": "SharedResources", "type": "SharedResources",
+             "items": [{"name": "CY19SU12", "path": "BaseThemes/CY19SU12.json",
+                        "type": "BaseTheme"}]},
+            {"name": "RegisteredResources", "type": "RegisteredResources",
+             "items": [{"name": NOME_TEMA, "path": f"{NOME_TEMA}.json",
+                        "type": "CustomTheme"}]},
+        ],
     })
     escrever(DEF / "pages" / "pages.json", {
         "$schema": S_PAGES,
@@ -481,13 +559,16 @@ def main() -> None:
     total = 0
     for (pid, nome), construtor in zip(PAGINAS, (pagina1, pagina2, pagina3)):
         base = DEF / "pages" / pid
-        escrever(base / "page.json", {
+        pg = {
             "$schema": S_PAGE, "name": pid, "displayName": nome,
             "displayOption": "FitToPage", "width": L, "height": A,
             "objects": {
                 "background": o(color=cor(FUNDO), transparency=num(0)),
                 "outspace": o(color=cor(FUNDO), transparency=num(0)),
-            }})
+            }}
+        if pid == "pagina2":
+            pg["visualInteractions"] = INTERACOES_P2
+        escrever(base / "page.json", pg)
         for v in construtor():
             escrever(base / "visuals" / v["name"] / "visual.json", v)
             total += 1

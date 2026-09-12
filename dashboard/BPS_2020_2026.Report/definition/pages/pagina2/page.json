@@ -54,5 +54,22 @@
         }
       }
     ]
-  }
+  },
+  "visualInteractions": [
+    {
+      "source": "barras_municipio",
+      "target": "arvore",
+      "type": "DataFilter"
+    },
+    {
+      "source": "barras_instituicao",
+      "target": "arvore",
+      "type": "DataFilter"
+    },
+    {
+      "source": "barras_fornecedor",
+      "target": "arvore",
+      "type": "DataFilter"
+    }
+  ]
 }

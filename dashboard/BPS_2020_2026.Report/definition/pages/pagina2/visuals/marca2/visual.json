@@ -5,8 +5,8 @@
     "x": 14,
     "y": 68,
     "z": 10,
-    "width": 140,
-    "height": 48
+    "width": 194,
+    "height": 52
   },
   "visual": {
     "visualType": "textbox",
@@ -20,7 +20,7 @@
                   {
                     "value": "Banco de Preços em Saúde",
                     "textStyle": {
-                      "fontSize": "10pt",
+                      "fontSize": "12pt",
                       "color": "#8E9AB5",
                       "fontWeight": "normal"
                     }
