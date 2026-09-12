@@ -26,7 +26,8 @@
                 }
               },
               "queryRef": "fBPS.ano_compra",
-              "active": true
+              "active": true,
+              "displayName": "Ano"
             },
             {
               "field": {
@@ -40,7 +41,8 @@
                 }
               },
               "queryRef": "fBPS.instituicao",
-              "active": true
+              "active": true,
+              "displayName": "Instituição"
             },
             {
               "field": {
@@ -54,7 +56,8 @@
                 }
               },
               "queryRef": "fBPS.principio_ativo",
-              "active": true
+              "active": true,
+              "displayName": "Produto"
             },
             {
               "field": {
@@ -68,7 +71,8 @@
                 }
               },
               "queryRef": "fBPS.unidade_fornecimento",
-              "active": true
+              "active": true,
+              "displayName": "Unidade"
             },
             {
               "field": {
@@ -82,7 +86,8 @@
                 }
               },
               "queryRef": "fBPS.qtd_itens_comprados",
-              "active": true
+              "active": true,
+              "displayName": "Quantidade"
             },
             {
               "field": {
@@ -96,7 +101,8 @@
                 }
               },
               "queryRef": "fBPS.preco_unitario",
-              "active": true
+              "active": true,
+              "displayName": "Preço unitário"
             },
             {
               "field": {
@@ -110,7 +116,8 @@
                 }
               },
               "queryRef": "fBPS.mediana_grupo",
-              "active": true
+              "active": true,
+              "displayName": "Mediana do grupo"
             },
             {
               "field": {
@@ -124,7 +131,8 @@
                 }
               },
               "queryRef": "fBPS.razao_vs_mediana",
-              "active": true
+              "active": true,
+              "displayName": "Razão"
             },
             {
               "field": {
@@ -138,7 +146,8 @@
                 }
               },
               "queryRef": "fBPS.Valor Total Registrado",
-              "active": true
+              "active": true,
+              "displayName": "Valor total"
             }
           ]
         }
