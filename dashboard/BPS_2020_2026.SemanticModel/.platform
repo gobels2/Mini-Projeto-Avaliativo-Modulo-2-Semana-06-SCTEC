@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "BPS_2020_2026"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "dccd0ae6-76ef-45c8-a089-662814296ccf"
+  }
+}

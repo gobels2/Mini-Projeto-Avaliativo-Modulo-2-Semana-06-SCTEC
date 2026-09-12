@@ -9,3 +9,7 @@ __pycache__/
 *.py[cod]
 .venv/
 .pytest_cache/
+
+# Arquivos locais que o Power BI Desktop cria ao abrir o projeto
+**/.pbi/
+*.abf

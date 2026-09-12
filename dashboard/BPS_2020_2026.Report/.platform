@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "BPS_2020_2026"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "de08141e-9492-4d7c-98bf-223e99e4b3ff"
+  }
+}
