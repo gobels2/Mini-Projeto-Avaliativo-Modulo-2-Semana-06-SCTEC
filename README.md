@@ -6,11 +6,9 @@ Aluno: **Leo Gobel**
 
 ---
 
-## 🎥 Vídeo de apresentação
+Video
+https://drive.google.com/file/d/10CYkMhWxp_wb1XrzRyEB7xezzofyrAxF/view?usp=drive_link
 
-<!-- COLE O LINK DO VÍDEO ABAIXO, substituindo a linha em itálico -->
-
-_Link do vídeo será adicionado aqui após a gravação._
 
 ---
 
